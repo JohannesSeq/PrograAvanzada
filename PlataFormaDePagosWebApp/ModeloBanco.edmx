@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PROYECTO_BANCO_LOS_PATITOSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BITACORA">
+          <Key>
+            <PropertyRef Name="IdEvento" />
+          </Key>
+          <Property Name="IdEvento" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TablaDeEvento" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TipoDeEvento" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FechaDeEvento" Type="datetime" Nullable="false" />
+          <Property Name="DescripcionDeEvento" Type="varchar(max)" Nullable="false" />
+          <Property Name="StackTrace" Type="varchar(max)" Nullable="false" />
+          <Property Name="DatosAnteriores" Type="varchar(max)" />
+          <Property Name="DatosPosteriores" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="CAJA">
+          <Key>
+            <PropertyRef Name="IdCaja" />
+          </Key>
+          <Property Name="IdCaja" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdComercio" Type="int" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="TelefonoSINPE" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="datetime" Nullable="false" />
+          <Property Name="FechaDeModificacion" Type="datetime" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="COMERCIO">
+          <Key>
+            <PropertyRef Name="IdComercio" />
+          </Key>
+          <Property Name="IdComercio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Identificacion" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="TipoIdentificacion" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="TipoDeComercio" Type="int" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CorreoElectronico" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Direccion" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="datetime" Nullable="false" />
+          <Property Name="FechaDeModificacion" Type="datetime" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SINPE">
+          <Key>
+            <PropertyRef Name="IdSinpe" />
+          </Key>
+          <Property Name="IdSinpe" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TelefonoOrigen" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="NombreOrigen" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="TelefonoDestinatario" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="NombreDestinatario" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Monto" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="datetime" Nullable="false" />
+          <Property Name="FechaDeModificacion" Type="datetime" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="CAJA_CMERCIO_PK">
+          <End Role="COMERCIO" Type="Self.COMERCIO" Multiplicity="0..1" />
+          <End Role="CAJA" Type="Self.CAJA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Principal>
+            <Dependent Role="CAJA">
+              <PropertyRef Name="IdComercio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PROYECTO_BANCO_LOS_PATITOSModelStoreContainer">
+          <EntitySet Name="BITACORA" EntityType="Self.BITACORA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CAJA" EntityType="Self.CAJA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="COMERCIO" EntityType="Self.COMERCIO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SINPE" EntityType="Self.SINPE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="CAJA_CMERCIO_PK" Association="Self.CAJA_CMERCIO_PK">
+            <End Role="COMERCIO" EntitySet="COMERCIO" />
+            <End Role="CAJA" EntitySet="CAJA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PROYECTO_BANCO_LOS_PATITOSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BITACORA">
+          <Key>
+            <PropertyRef Name="IdEvento" />
+          </Key>
+          <Property Name="IdEvento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TablaDeEvento" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TipoDeEvento" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaDeEvento" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DescripcionDeEvento" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DatosAnteriores" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DatosPosteriores" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CAJA">
+          <Key>
+            <PropertyRef Name="IdCaja" />
+          </Key>
+          <Property Name="IdCaja" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdComercio" Type="Int32" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TelefonoSINPE" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaDeModificacion" Type="DateTime" Precision="3" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="COMERCIO" Relationship="Self.CAJA_CMERCIO_PK" FromRole="CAJA" ToRole="COMERCIO" />
+        </EntityType>
+        <EntityType Name="COMERCIO">
+          <Key>
+            <PropertyRef Name="IdComercio" />
+          </Key>
+          <Property Name="IdComercio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Identificacion" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TipoIdentificacion" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TipoDeComercio" Type="Int32" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CorreoElectronico" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Direccion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaDeModificacion" Type="DateTime" Precision="3" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CAJA" Relationship="Self.CAJA_CMERCIO_PK" FromRole="COMERCIO" ToRole="CAJA" />
+        </EntityType>
+        <EntityType Name="SINPE">
+          <Key>
+            <PropertyRef Name="IdSinpe" />
+          </Key>
+          <Property Name="IdSinpe" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TelefonoOrigen" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NombreOrigen" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TelefonoDestinatario" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NombreDestinatario" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Monto" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaDeModificacion" Type="DateTime" Precision="3" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="CAJA_CMERCIO_PK">
+          <End Role="COMERCIO" Type="Self.COMERCIO" Multiplicity="0..1" />
+          <End Role="CAJA" Type="Self.CAJA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Principal>
+            <Dependent Role="CAJA">
+              <PropertyRef Name="IdComercio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PROYECTO_BANCO_LOS_PATITOSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BITACORA" EntityType="Self.BITACORA" />
+          <EntitySet Name="CAJA" EntityType="Self.CAJA" />
+          <EntitySet Name="COMERCIO" EntityType="Self.COMERCIO" />
+          <EntitySet Name="SINPE" EntityType="Self.SINPE" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="CAJA_CMERCIO_PK" Association="Self.CAJA_CMERCIO_PK">
+            <End Role="COMERCIO" EntitySet="COMERCIO" />
+            <End Role="CAJA" EntitySet="CAJA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PROYECTO_BANCO_LOS_PATITOSModelStoreContainer" CdmEntityContainer="PROYECTO_BANCO_LOS_PATITOSEntities">
+          <EntitySetMapping Name="BITACORA">
+            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.BITACORA">
+              <MappingFragment StoreEntitySet="BITACORA">
+                <ScalarProperty Name="IdEvento" ColumnName="IdEvento" />
+                <ScalarProperty Name="TablaDeEvento" ColumnName="TablaDeEvento" />
+                <ScalarProperty Name="TipoDeEvento" ColumnName="TipoDeEvento" />
+                <ScalarProperty Name="FechaDeEvento" ColumnName="FechaDeEvento" />
+                <ScalarProperty Name="DescripcionDeEvento" ColumnName="DescripcionDeEvento" />
+                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
+                <ScalarProperty Name="DatosAnteriores" ColumnName="DatosAnteriores" />
+                <ScalarProperty Name="DatosPosteriores" ColumnName="DatosPosteriores" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CAJA">
+            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.CAJA">
+              <MappingFragment StoreEntitySet="CAJA">
+                <ScalarProperty Name="IdCaja" ColumnName="IdCaja" />
+                <ScalarProperty Name="IdComercio" ColumnName="IdComercio" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="TelefonoSINPE" ColumnName="TelefonoSINPE" />
+                <ScalarProperty Name="FechaDeRegistro" ColumnName="FechaDeRegistro" />
+                <ScalarProperty Name="FechaDeModificacion" ColumnName="FechaDeModificacion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="COMERCIO">
+            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO">
+              <MappingFragment StoreEntitySet="COMERCIO">
+                <ScalarProperty Name="IdComercio" ColumnName="IdComercio" />
+                <ScalarProperty Name="Identificacion" ColumnName="Identificacion" />
+                <ScalarProperty Name="TipoIdentificacion" ColumnName="TipoIdentificacion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="TipoDeComercio" ColumnName="TipoDeComercio" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="FechaDeRegistro" ColumnName="FechaDeRegistro" />
+                <ScalarProperty Name="FechaDeModificacion" ColumnName="FechaDeModificacion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SINPE">
+            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.SINPE">
+              <MappingFragment StoreEntitySet="SINPE">
+                <ScalarProperty Name="IdSinpe" ColumnName="IdSinpe" />
+                <ScalarProperty Name="TelefonoOrigen" ColumnName="TelefonoOrigen" />
+                <ScalarProperty Name="NombreOrigen" ColumnName="NombreOrigen" />
+                <ScalarProperty Name="TelefonoDestinatario" ColumnName="TelefonoDestinatario" />
+                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="FechaDeRegistro" ColumnName="FechaDeRegistro" />
+                <ScalarProperty Name="FechaDeModificacion" ColumnName="FechaDeModificacion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
