@@ -3,7 +3,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using PlataFormaDePagosWebApp.Models;
+using Newtonsoft.Json;
+using PlataFormaDePagosWebApp;
 using PlataFormaDePagosWebApp.Helpers;
 
 namespace PlataFormaDePagosWebApp.Controllers
@@ -12,136 +13,160 @@ namespace PlataFormaDePagosWebApp.Controllers
     {
         private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
 
-        // GET: COMERCIOs
         public ActionResult Index()
         {
             return View(db.COMERCIO.ToList());
         }
 
-        // GET: COMERCIOs/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            COMERCIO cOMERCIO = db.COMERCIO.Find(id);
-            if (cOMERCIO == null)
+            COMERCIO comercio = db.COMERCIO.Find(id);
+            if (comercio == null)
                 return HttpNotFound();
 
-            return View(cOMERCIO);
+            return View(comercio);
         }
 
-        // GET: COMERCIOs/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: COMERCIOs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdComercio,Nombre,Identificacion,CorreoElectronico")] COMERCIO cOMERCIO)
+        public ActionResult Create([Bind(Include = "IdComercio,Nombre,Identificacion,CorreoElectronico")] COMERCIO comercio)
         {
-            // Validación de identificación única
-            if (db.COMERCIO.Any(c => c.Identificacion == cOMERCIO.Identificacion))
+            if (db.COMERCIO.Any(c => c.Identificacion == comercio.Identificacion))
             {
                 ModelState.AddModelError("Identificacion", "Ya existe un comercio con esta identificación.");
-                return View(cOMERCIO);
+                return View(comercio);
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    cOMERCIO.FechaDeRegistro = DateTime.Now;
-                    db.COMERCIO.Add(cOMERCIO);
+                    comercio.FechaDeRegistro = DateTime.Now;
+                    db.COMERCIO.Add(comercio);
                     db.SaveChanges();
 
-                    // Registro en bitácora
-                    BitacoraHelper.Registrar("Crear comercio", "COMERCIO");
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "COMERCIO",
+                        tipoEvento: "Registrar",
+                        descripcion: $"Comercio creado: {comercio.Nombre}",
+                        datosPosteriores: comercio
+                    );
 
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "COMERCIO",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
                     ModelState.AddModelError("", "Error al guardar: " + ex.Message);
                 }
             }
 
-            return View(cOMERCIO);
+            return View(comercio);
         }
 
-        // GET: COMERCIOs/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            COMERCIO cOMERCIO = db.COMERCIO.Find(id);
-            if (cOMERCIO == null)
+            COMERCIO comercio = db.COMERCIO.Find(id);
+            if (comercio == null)
                 return HttpNotFound();
 
-            return View(cOMERCIO);
+            return View(comercio);
         }
 
-        // POST: COMERCIOs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdComercio,Nombre,Identificacion,CorreoElectronico")] COMERCIO cOMERCIO)
+        public ActionResult Edit([Bind(Include = "IdComercio,Nombre,Identificacion,CorreoElectronico")] COMERCIO comercio)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    cOMERCIO.FechaDeModificacion = DateTime.Now;
-                    db.Entry(cOMERCIO).State = EntityState.Modified;
+                    var anterior = db.COMERCIO.AsNoTracking().FirstOrDefault(c => c.IdComercio == comercio.IdComercio);
+                    comercio.FechaDeModificacion = DateTime.Now;
+                    db.Entry(comercio).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    // Registro en bitácora
-                    BitacoraHelper.Registrar($"Editar comercio ID {cOMERCIO.IdComercio}", "COMERCIO");
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "COMERCIO",
+                        tipoEvento: "Editar",
+                        descripcion: $"Comercio editado: {comercio.IdComercio}",
+                        datosAnteriores: anterior,
+                        datosPosteriores: comercio
+                    );
 
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "COMERCIO",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
                     ModelState.AddModelError("", "Error al guardar: " + ex.Message);
                 }
             }
 
-            return View(cOMERCIO);
+            return View(comercio);
         }
 
-        // GET: COMERCIOs/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            COMERCIO cOMERCIO = db.COMERCIO.Find(id);
-            if (cOMERCIO == null)
+            COMERCIO comercio = db.COMERCIO.Find(id);
+            if (comercio == null)
                 return HttpNotFound();
 
-            return View(cOMERCIO);
+            return View(comercio);
         }
 
-        // POST: COMERCIOs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            COMERCIO cOMERCIO = db.COMERCIO.Find(id);
+            COMERCIO comercio = db.COMERCIO.Find(id);
             try
             {
-                db.COMERCIO.Remove(cOMERCIO);
+                var datosAnteriores = JsonConvert.SerializeObject(comercio);
+                db.COMERCIO.Remove(comercio);
                 db.SaveChanges();
 
-                // Registro en bitácora
-                BitacoraHelper.Registrar($"Eliminar comercio ID {cOMERCIO.IdComercio}", "COMERCIO");
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "COMERCIO",
+                    tipoEvento: "Eliminar",
+                    descripcion: $"Comercio eliminado: {comercio.IdComercio}",
+                    datosAnteriores: comercio
+                );
             }
             catch (Exception ex)
             {
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "COMERCIO",
+                    tipoEvento: "Error",
+                    descripcion: ex.Message,
+                    stackTrace: ex.StackTrace
+                );
                 ModelState.AddModelError("", "Error al eliminar: " + ex.Message);
-                return View(cOMERCIO);
+                return View(comercio);
             }
 
             return RedirectToAction("Index");

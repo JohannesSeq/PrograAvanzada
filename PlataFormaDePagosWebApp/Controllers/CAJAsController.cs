@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using PlataFormaDePagosWebApp;
 using PlataFormaDePagosWebApp.Helpers;
 
@@ -14,14 +13,12 @@ namespace PlataFormaDePagosWebApp.Controllers
     {
         private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
 
-        // GET: CAJAs
         public ActionResult Index()
         {
             var cAJA = db.CAJA.Include(c => c.COMERCIO);
             return View(cAJA.ToList());
         }
 
-        // GET: CAJAs/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -34,14 +31,12 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(cAJA);
         }
 
-        // GET: CAJAs/Create
         public ActionResult Create()
         {
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion");
             return View();
         }
 
-        // POST: CAJAs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,Estado")] CAJA cAJA)
@@ -54,11 +49,24 @@ namespace PlataFormaDePagosWebApp.Controllers
                     db.CAJA.Add(cAJA);
                     db.SaveChanges();
 
-                    BitacoraHelper.Registrar("Crear caja", "CAJA");
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "CAJA",
+                        tipoEvento: "Registrar",
+                        descripcion: $"Caja creada: {cAJA.Nombre}",
+                        datosPosteriores: cAJA
+                    );
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "CAJA",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
+
                     ModelState.AddModelError("", "Error al guardar: " + ex.Message);
                 }
             }
@@ -67,7 +75,6 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(cAJA);
         }
 
-        // GET: CAJAs/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -81,7 +88,6 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(cAJA);
         }
 
-        // POST: CAJAs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,Estado")] CAJA cAJA)
@@ -90,15 +96,31 @@ namespace PlataFormaDePagosWebApp.Controllers
             {
                 try
                 {
+                    var anterior = db.CAJA.AsNoTracking().FirstOrDefault(x => x.IdCaja == cAJA.IdCaja);
                     cAJA.FechaDeModificacion = DateTime.Now;
+
                     db.Entry(cAJA).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    BitacoraHelper.Registrar($"Editar caja ID {cAJA.IdCaja}", "CAJA");
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "CAJA",
+                        tipoEvento: "Editar",
+                        descripcion: $"Caja editada: {cAJA.IdCaja}",
+                        datosAnteriores: anterior,
+                        datosPosteriores: cAJA
+                    );
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "CAJA",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
+
                     ModelState.AddModelError("", "Error al editar: " + ex.Message);
                 }
             }
@@ -107,7 +129,6 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(cAJA);
         }
 
-        // GET: CAJAs/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -120,7 +141,6 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(cAJA);
         }
 
-        // POST: CAJAs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -128,13 +148,26 @@ namespace PlataFormaDePagosWebApp.Controllers
             CAJA cAJA = db.CAJA.Find(id);
             try
             {
+                var anterior = db.CAJA.AsNoTracking().FirstOrDefault(c => c.IdCaja == id);
                 db.CAJA.Remove(cAJA);
                 db.SaveChanges();
 
-                BitacoraHelper.Registrar($"Eliminar caja ID {cAJA.IdCaja}", "CAJA");
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "CAJA",
+                    tipoEvento: "Eliminar",
+                    descripcion: $"Caja eliminada: {cAJA.IdCaja}",
+                    datosAnteriores: anterior
+                );
             }
             catch (Exception ex)
             {
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "CAJA",
+                    tipoEvento: "Error",
+                    descripcion: ex.Message,
+                    stackTrace: ex.StackTrace
+                );
+
                 ModelState.AddModelError("", "Error al eliminar: " + ex.Message);
                 return View(cAJA);
             }
@@ -145,9 +178,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

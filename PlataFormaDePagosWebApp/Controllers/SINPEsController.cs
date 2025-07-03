@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using PlataFormaDePagosWebApp;
 using PlataFormaDePagosWebApp.Helpers;
 
@@ -15,34 +13,28 @@ namespace PlataFormaDePagosWebApp.Controllers
     {
         private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
 
-        // GET: SINPEs
         public ActionResult Index()
         {
             return View(db.SINPE.ToList());
         }
 
-        // GET: SINPEs/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             SINPE sINPE = db.SINPE.Find(id);
             if (sINPE == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(sINPE);
         }
 
-        // GET: SINPEs/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: SINPEs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,Descripcion,Estado")] SINPE sINPE)
@@ -55,11 +47,24 @@ namespace PlataFormaDePagosWebApp.Controllers
                     db.SINPE.Add(sINPE);
                     db.SaveChanges();
 
-                    BitacoraHelper.Registrar("Crear transferencia", "SINPE");
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "SINPE",
+                        tipoEvento: "Registrar",
+                        descripcion: $"Transferencia registrada: {sINPE.IdSinpe}",
+                        datosPosteriores: sINPE
+                    );
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "SINPE",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
+
                     ModelState.AddModelError("", "Error al guardar: " + ex.Message);
                 }
             }
@@ -67,22 +72,18 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(sINPE);
         }
 
-        // GET: SINPEs/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             SINPE sINPE = db.SINPE.Find(id);
             if (sINPE == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(sINPE);
         }
 
-        // POST: SINPEs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,Descripcion,Estado")] SINPE sINPE)
@@ -91,37 +92,50 @@ namespace PlataFormaDePagosWebApp.Controllers
             {
                 try
                 {
+                    var anterior = db.SINPE.AsNoTracking().FirstOrDefault(x => x.IdSinpe == sINPE.IdSinpe);
                     sINPE.FechaDeModificacion = DateTime.Now;
+
                     db.Entry(sINPE).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    BitacoraHelper.Registrar($"Editar transferencia ID {sINPE.IdSinpe}", "SINPE");
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "SINPE",
+                        tipoEvento: "Editar",
+                        descripcion: $"Transferencia editada: {sINPE.IdSinpe}",
+                        datosAnteriores: anterior,
+                        datosPosteriores: sINPE
+                    );
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "SINPE",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
+
                     ModelState.AddModelError("", "Error al editar: " + ex.Message);
                 }
             }
+
             return View(sINPE);
         }
 
-        // GET: SINPEs/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             SINPE sINPE = db.SINPE.Find(id);
             if (sINPE == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(sINPE);
         }
 
-        // POST: SINPEs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -129,13 +143,26 @@ namespace PlataFormaDePagosWebApp.Controllers
             SINPE sINPE = db.SINPE.Find(id);
             try
             {
+                var anterior = db.SINPE.AsNoTracking().FirstOrDefault(x => x.IdSinpe == id);
                 db.SINPE.Remove(sINPE);
                 db.SaveChanges();
 
-                BitacoraHelper.Registrar($"Eliminar transferencia ID {sINPE.IdSinpe}", "SINPE");
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "SINPE",
+                    tipoEvento: "Eliminar",
+                    descripcion: $"Transferencia eliminada: {sINPE.IdSinpe}",
+                    datosAnteriores: anterior
+                );
             }
             catch (Exception ex)
             {
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "SINPE",
+                    tipoEvento: "Error",
+                    descripcion: ex.Message,
+                    stackTrace: ex.StackTrace
+                );
+
                 ModelState.AddModelError("", "Error al eliminar: " + ex.Message);
                 return View(sINPE);
             }
@@ -146,9 +173,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }
