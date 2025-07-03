@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using PlataFormaDePagosWebApp;
+using PlataFormaDePagosWebApp.Helpers;
+using System;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Newtonsoft.Json;
-using PlataFormaDePagosWebApp;
-using PlataFormaDePagosWebApp.Helpers;
 
 namespace PlataFormaDePagosWebApp.Controllers
 {
@@ -37,7 +38,7 @@ namespace PlataFormaDePagosWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdComercio,Nombre,Identificacion,CorreoElectronico")] COMERCIO comercio)
+        public ActionResult Create([Bind(Include = "Nombre,Identificacion,TipoIdentificacion,TipoDeComercio,Telefono,CorreoElectronico,Direccion")] COMERCIO comercio)
         {
             if (db.COMERCIO.Any(c => c.Identificacion == comercio.Identificacion))
             {
@@ -50,6 +51,7 @@ namespace PlataFormaDePagosWebApp.Controllers
                 try
                 {
                     comercio.FechaDeRegistro = DateTime.Now;
+                    comercio.Estado = true;
                     db.COMERCIO.Add(comercio);
                     db.SaveChanges();
 
@@ -62,15 +64,22 @@ namespace PlataFormaDePagosWebApp.Controllers
 
                     return RedirectToAction("Index");
                 }
-                catch (Exception ex)
+                catch (DbEntityValidationException ex)
                 {
+                    foreach (var validationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            ModelState.AddModelError(validationError.PropertyName, validationError.ErrorMessage);
+                        }
+                    }
+
                     BitacoraHelper.RegistrarEvento(
                         tabla: "COMERCIO",
                         tipoEvento: "Error",
                         descripcion: ex.Message,
-                        stackTrace: ex.StackTrace
+                        stackTrace: ex.ToString()
                     );
-                    ModelState.AddModelError("", "Error al guardar: " + ex.Message);
                 }
             }
 
@@ -91,14 +100,26 @@ namespace PlataFormaDePagosWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdComercio,Nombre,Identificacion,CorreoElectronico")] COMERCIO comercio)
+        public ActionResult Edit([Bind(Include = "IdComercio,Nombre,TipoDeComercio,Telefono,CorreoElectronico,Direccion,Estado")] COMERCIO comercio)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var anterior = db.COMERCIO.AsNoTracking().FirstOrDefault(c => c.IdComercio == comercio.IdComercio);
+                    var comercioOriginal = db.COMERCIO.AsNoTracking().FirstOrDefault(c => c.IdComercio == comercio.IdComercio);
+                    if (comercioOriginal == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    // Mantener valores que no deben cambiar
+                    comercio.Identificacion = comercioOriginal.Identificacion;
+                    comercio.TipoIdentificacion = comercioOriginal.TipoIdentificacion;
+                    comercio.FechaDeRegistro = comercioOriginal.FechaDeRegistro;
+
+                    // Actualizar automáticamente la fecha de modificación
                     comercio.FechaDeModificacion = DateTime.Now;
+
                     db.Entry(comercio).State = EntityState.Modified;
                     db.SaveChanges();
 
@@ -106,7 +127,7 @@ namespace PlataFormaDePagosWebApp.Controllers
                         tabla: "COMERCIO",
                         tipoEvento: "Editar",
                         descripcion: $"Comercio editado: {comercio.IdComercio}",
-                        datosAnteriores: anterior,
+                        datosAnteriores: comercioOriginal,
                         datosPosteriores: comercio
                     );
 

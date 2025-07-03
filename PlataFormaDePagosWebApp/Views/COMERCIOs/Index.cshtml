@@ -1,87 +1,63 @@
 ﻿@model IEnumerable<PlataFormaDePagosWebApp.COMERCIO>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Lista de Comercios";
+
+    Func<int, string> tipoIdentificacionTexto = tipo =>
+        tipo == 1 ? "Física" :
+        tipo == 2 ? "Jurídica" : "Desconocido";
+
+    Func<int, string> tipoComercioTexto = tipo =>
+        tipo == 1 ? "Restaurantes" :
+        tipo == 2 ? "Supermercados" :
+        tipo == 3 ? "Ferreterías" :
+        tipo == 4 ? "Otros" : "Desconocido";
+
+    Func<bool, string> estadoTexto = estado => estado ? "Activo" : "Inactivo";
 }
 
-<h2>Index</h2>
+<h2>Lista de Comercios</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Registrar Nuevo Comercio", "Create", null, new { @class = "btn btn-primary" })
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Identificacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoIdentificacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoDeComercio)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Telefono)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CorreoElectronico)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Direccion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDeModificacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Estado)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Identificacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TipoIdentificacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TipoDeComercio)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Telefono)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CorreoElectronico)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Direccion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeModificacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Estado)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdComercio }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdComercio }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdComercio })
-        </td>
-    </tr>
-}
-
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Identificacion)</th>
+            <th>@Html.DisplayName("Tipo de Identificación")</th>
+            <th>@Html.DisplayNameFor(model => model.First().Nombre)</th>
+            <th>@Html.DisplayName("Tipo de Comercio")</th>
+            <th>@Html.DisplayNameFor(model => model.First().Telefono)</th>
+            <th>@Html.DisplayNameFor(model => model.First().CorreoElectronico)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Direccion)</th>
+            <th>@Html.DisplayNameFor(model => model.First().FechaDeRegistro)</th>
+            <th>@Html.DisplayNameFor(model => model.First().FechaDeModificacion)</th>
+            <th>@Html.DisplayName("Estado")</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Identificacion</td>
+                <td>@tipoIdentificacionTexto(item.TipoIdentificacion)</td>
+                <td>@item.Nombre</td>
+                <td>@tipoComercioTexto(item.TipoDeComercio)</td>
+                <td>@item.Telefono</td>
+                <td>@item.CorreoElectronico</td>
+                <td>@item.Direccion</td>
+                <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@(item.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                <td>@estadoTexto(item.Estado)</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IdComercio }, new { @class = "btn btn-sm btn-warning" }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IdComercio }, new { @class = "btn btn-sm btn-info" }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.IdComercio }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

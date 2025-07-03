@@ -37,13 +37,25 @@ namespace PlataFormaDePagosWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,Descripcion,Estado")] SINPE sINPE)
+        public ActionResult Create([Bind(Include = "TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,Descripcion")] SINPE sINPE)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Verificar si el teléfono de la caja existe y está activo
+                    var caja = db.CAJA.FirstOrDefault(c => c.TelefonoSINPE == sINPE.TelefonoDestinatario && c.Estado == true);
+
+                    if (caja == null)
+                    {
+                        ModelState.AddModelError("TelefonoDestinatario", "El teléfono ingresado no pertenece a una caja activa.");
+                        return View(sINPE);
+                    }
+
+                    // Setear valores por defecto
                     sINPE.FechaDeRegistro = DateTime.Now;
+                    sINPE.Estado = false;
+
                     db.SINPE.Add(sINPE);
                     db.SaveChanges();
 

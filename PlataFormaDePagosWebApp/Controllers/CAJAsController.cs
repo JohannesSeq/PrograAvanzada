@@ -39,13 +39,31 @@ namespace PlataFormaDePagosWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,Estado")] CAJA cAJA)
+        public ActionResult Create([Bind(Include = "IdComercio,Nombre,Descripcion,TelefonoSINPE,Estado")] CAJA cAJA)
         {
+            // Validación: Teléfono activo único
+            bool telefonoDuplicado = db.CAJA.Any(c =>
+                c.TelefonoSINPE == cAJA.TelefonoSINPE &&
+                c.Estado == true);
+
+            if (telefonoDuplicado)
+                ModelState.AddModelError("TelefonoSINPE", "Ya existe una caja activa con ese número de teléfono.");
+
+            // Validación: Nombre único por comercio
+            bool nombreDuplicado = db.CAJA.Any(c =>
+                c.Nombre == cAJA.Nombre &&
+                c.IdComercio == cAJA.IdComercio);
+
+            if (nombreDuplicado)
+                ModelState.AddModelError("Nombre", "Ya existe una caja con ese nombre para este comercio.");
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     cAJA.FechaDeRegistro = DateTime.Now;
+                    cAJA.FechaDeModificacion = null;
+
                     db.CAJA.Add(cAJA);
                     db.SaveChanges();
 
@@ -173,6 +191,20 @@ namespace PlataFormaDePagosWebApp.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public ActionResult VerSinpe(string telefono)
+        {
+            if (string.IsNullOrEmpty(telefono))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var sinpes = db.SINPE
+                .Where(s => s.TelefonoDestinatario == telefono)
+                .OrderByDescending(s => s.FechaDeRegistro)
+                .ToList();
+
+            ViewBag.Telefono = telefono;
+            return View(sinpes);
         }
 
         protected override void Dispose(bool disposing)
