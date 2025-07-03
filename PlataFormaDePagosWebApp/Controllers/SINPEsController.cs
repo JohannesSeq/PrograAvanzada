@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using PlataFormaDePagosWebApp;
+using PlataFormaDePagosWebApp.Helpers;
 
 namespace PlataFormaDePagosWebApp.Controllers
 {
@@ -42,17 +43,25 @@ namespace PlataFormaDePagosWebApp.Controllers
         }
 
         // POST: SINPEs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,Descripcion,FechaDeRegistro,FechaDeModificacion,Estado")] SINPE sINPE)
+        public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,Descripcion,Estado")] SINPE sINPE)
         {
             if (ModelState.IsValid)
             {
-                db.SINPE.Add(sINPE);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    sINPE.FechaDeRegistro = DateTime.Now;
+                    db.SINPE.Add(sINPE);
+                    db.SaveChanges();
+
+                    BitacoraHelper.Registrar("Crear transferencia", "SINPE");
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al guardar: " + ex.Message);
+                }
             }
 
             return View(sINPE);
@@ -74,17 +83,25 @@ namespace PlataFormaDePagosWebApp.Controllers
         }
 
         // POST: SINPEs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,Descripcion,FechaDeRegistro,FechaDeModificacion,Estado")] SINPE sINPE)
+        public ActionResult Edit([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,Descripcion,Estado")] SINPE sINPE)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(sINPE).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    sINPE.FechaDeModificacion = DateTime.Now;
+                    db.Entry(sINPE).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    BitacoraHelper.Registrar($"Editar transferencia ID {sINPE.IdSinpe}", "SINPE");
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al editar: " + ex.Message);
+                }
             }
             return View(sINPE);
         }
@@ -110,8 +127,19 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             SINPE sINPE = db.SINPE.Find(id);
-            db.SINPE.Remove(sINPE);
-            db.SaveChanges();
+            try
+            {
+                db.SINPE.Remove(sINPE);
+                db.SaveChanges();
+
+                BitacoraHelper.Registrar($"Eliminar transferencia ID {sINPE.IdSinpe}", "SINPE");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error al eliminar: " + ex.Message);
+                return View(sINPE);
+            }
+
             return RedirectToAction("Index");
         }
 

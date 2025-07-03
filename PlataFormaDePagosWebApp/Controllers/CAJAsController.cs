@@ -4,9 +4,9 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using PlataFormaDePagosWebApp;
+using PlataFormaDePagosWebApp.Helpers;
 
 namespace PlataFormaDePagosWebApp.Controllers
 {
@@ -25,14 +25,12 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             CAJA cAJA = db.CAJA.Find(id);
             if (cAJA == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(cAJA);
         }
 
@@ -44,17 +42,25 @@ namespace PlataFormaDePagosWebApp.Controllers
         }
 
         // POST: CAJAs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,FechaDeRegistro,FechaDeModificacion,Estado")] CAJA cAJA)
+        public ActionResult Create([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,Estado")] CAJA cAJA)
         {
             if (ModelState.IsValid)
             {
-                db.CAJA.Add(cAJA);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    cAJA.FechaDeRegistro = DateTime.Now;
+                    db.CAJA.Add(cAJA);
+                    db.SaveChanges();
+
+                    BitacoraHelper.Registrar("Crear caja", "CAJA");
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al guardar: " + ex.Message);
+                }
             }
 
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", cAJA.IdComercio);
@@ -65,31 +71,38 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             CAJA cAJA = db.CAJA.Find(id);
             if (cAJA == null)
-            {
                 return HttpNotFound();
-            }
+
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", cAJA.IdComercio);
             return View(cAJA);
         }
 
         // POST: CAJAs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,FechaDeRegistro,FechaDeModificacion,Estado")] CAJA cAJA)
+        public ActionResult Edit([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,Estado")] CAJA cAJA)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(cAJA).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    cAJA.FechaDeModificacion = DateTime.Now;
+                    db.Entry(cAJA).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    BitacoraHelper.Registrar($"Editar caja ID {cAJA.IdCaja}", "CAJA");
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al editar: " + ex.Message);
+                }
             }
+
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", cAJA.IdComercio);
             return View(cAJA);
         }
@@ -98,14 +111,12 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             CAJA cAJA = db.CAJA.Find(id);
             if (cAJA == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(cAJA);
         }
 
@@ -115,8 +126,19 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             CAJA cAJA = db.CAJA.Find(id);
-            db.CAJA.Remove(cAJA);
-            db.SaveChanges();
+            try
+            {
+                db.CAJA.Remove(cAJA);
+                db.SaveChanges();
+
+                BitacoraHelper.Registrar($"Eliminar caja ID {cAJA.IdCaja}", "CAJA");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error al eliminar: " + ex.Message);
+                return View(cAJA);
+            }
+
             return RedirectToAction("Index");
         }
 

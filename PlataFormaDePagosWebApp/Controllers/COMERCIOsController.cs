@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using PlataFormaDePagosWebApp;
+using PlataFormaDePagosWebApp.Models;
+using PlataFormaDePagosWebApp.Helpers;
 
 namespace PlataFormaDePagosWebApp.Controllers
 {
@@ -24,14 +22,12 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             COMERCIO cOMERCIO = db.COMERCIO.Find(id);
             if (cOMERCIO == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(cOMERCIO);
         }
 
@@ -42,17 +38,34 @@ namespace PlataFormaDePagosWebApp.Controllers
         }
 
         // POST: COMERCIOs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdComercio,Identificacion,TipoIdentificacion,Nombre,TipoDeComercio,Telefono,CorreoElectronico,Direccion,FechaDeRegistro,FechaDeModificacion,Estado")] COMERCIO cOMERCIO)
+        public ActionResult Create([Bind(Include = "IdComercio,Nombre,Identificacion,CorreoElectronico")] COMERCIO cOMERCIO)
         {
+            // Validación de identificación única
+            if (db.COMERCIO.Any(c => c.Identificacion == cOMERCIO.Identificacion))
+            {
+                ModelState.AddModelError("Identificacion", "Ya existe un comercio con esta identificación.");
+                return View(cOMERCIO);
+            }
+
             if (ModelState.IsValid)
             {
-                db.COMERCIO.Add(cOMERCIO);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    cOMERCIO.FechaDeRegistro = DateTime.Now;
+                    db.COMERCIO.Add(cOMERCIO);
+                    db.SaveChanges();
+
+                    // Registro en bitácora
+                    BitacoraHelper.Registrar("Crear comercio", "COMERCIO");
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al guardar: " + ex.Message);
+                }
             }
 
             return View(cOMERCIO);
@@ -62,30 +75,39 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             COMERCIO cOMERCIO = db.COMERCIO.Find(id);
             if (cOMERCIO == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(cOMERCIO);
         }
 
         // POST: COMERCIOs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdComercio,Identificacion,TipoIdentificacion,Nombre,TipoDeComercio,Telefono,CorreoElectronico,Direccion,FechaDeRegistro,FechaDeModificacion,Estado")] COMERCIO cOMERCIO)
+        public ActionResult Edit([Bind(Include = "IdComercio,Nombre,Identificacion,CorreoElectronico")] COMERCIO cOMERCIO)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(cOMERCIO).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    cOMERCIO.FechaDeModificacion = DateTime.Now;
+                    db.Entry(cOMERCIO).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    // Registro en bitácora
+                    BitacoraHelper.Registrar($"Editar comercio ID {cOMERCIO.IdComercio}", "COMERCIO");
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al guardar: " + ex.Message);
+                }
             }
+
             return View(cOMERCIO);
         }
 
@@ -93,14 +115,12 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             COMERCIO cOMERCIO = db.COMERCIO.Find(id);
             if (cOMERCIO == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(cOMERCIO);
         }
 
@@ -110,17 +130,27 @@ namespace PlataFormaDePagosWebApp.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             COMERCIO cOMERCIO = db.COMERCIO.Find(id);
-            db.COMERCIO.Remove(cOMERCIO);
-            db.SaveChanges();
+            try
+            {
+                db.COMERCIO.Remove(cOMERCIO);
+                db.SaveChanges();
+
+                // Registro en bitácora
+                BitacoraHelper.Registrar($"Eliminar comercio ID {cOMERCIO.IdComercio}", "COMERCIO");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error al eliminar: " + ex.Message);
+                return View(cOMERCIO);
+            }
+
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }
