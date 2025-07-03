@@ -10,6 +10,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
         <div class="container">
             @Html.ActionLink("SINPE Empresarial", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
@@ -28,6 +29,7 @@
             </div>
         </div>
     </nav>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
