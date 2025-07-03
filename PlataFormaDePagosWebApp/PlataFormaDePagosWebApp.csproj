@@ -129,6 +129,7 @@
     <Compile Include="COMERCIO.cs">
       <DependentUpon>ModeloBanco.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\BITACORAsController.cs" />
     <Compile Include="Controllers\CAJAsController.cs" />
     <Compile Include="Controllers\COMERCIOsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BitacoraHelper.cs" />
     <Compile Include="ModeloBanco.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -242,6 +244,8 @@
     <Content Include="Views\SINPEs\Details.cshtml" />
     <Content Include="Views\SINPEs\Edit.cshtml" />
     <Content Include="Views\SINPEs\Index.cshtml" />
+    <Content Include="Views\CAJAs\VerSinpe.cshtml" />
+    <Content Include="Views\BITACORAs\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

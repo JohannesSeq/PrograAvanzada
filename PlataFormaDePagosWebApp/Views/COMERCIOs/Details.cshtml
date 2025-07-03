@@ -1,98 +1,58 @@
 ﻿@model PlataFormaDePagosWebApp.COMERCIO
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles del Comercio";
+
+    string tipoIdentificacion = Model.TipoIdentificacion == 1 ? "Física" :
+                                Model.TipoIdentificacion == 2 ? "Jurídica" : "Desconocido";
+
+    string tipoDeComercio = Model.TipoDeComercio == 1 ? "Restaurantes" :
+                            Model.TipoDeComercio == 2 ? "Supermercados" :
+                            Model.TipoDeComercio == 3 ? "Ferreterías" :
+                            Model.TipoDeComercio == 4 ? "Otros" : "Desconocido";
+
+    string estado = Model.Estado ? "Activo" : "Inactivo";
 }
 
-<h2>Details</h2>
+<h2>Detalles del Comercio</h2>
 
 <div>
     <h4>COMERCIO</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Identificacion)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Identificacion)</dt>
+        <dd>@Html.DisplayFor(model => model.Identificacion)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Identificacion)
-        </dd>
+        <dt>@Html.DisplayName("Tipo de Identificación")</dt>
+        <dd>@tipoIdentificacion</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TipoIdentificacion)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Nombre)</dt>
+        <dd>@Html.DisplayFor(model => model.Nombre)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TipoIdentificacion)
-        </dd>
+        <dt>@Html.DisplayName("Tipo de Comercio")</dt>
+        <dd>@tipoDeComercio</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Telefono)</dt>
+        <dd>@Html.DisplayFor(model => model.Telefono)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.CorreoElectronico)</dt>
+        <dd>@Html.DisplayFor(model => model.CorreoElectronico)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TipoDeComercio)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Direccion)</dt>
+        <dd>@Html.DisplayFor(model => model.Direccion)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TipoDeComercio)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.FechaDeRegistro)</dt>
+        <dd>@Html.DisplayFor(model => model.FechaDeRegistro)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Telefono)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.FechaDeModificacion)</dt>
+        <dd>@Html.DisplayFor(model => model.FechaDeModificacion)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Telefono)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CorreoElectronico)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CorreoElectronico)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Direccion)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Direccion)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FechaDeRegistro)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FechaDeModificacion)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FechaDeModificacion)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-
+        <dt>@Html.DisplayName("Estado")</dt>
+        <dd>@estado</dd>
     </dl>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.IdComercio }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IdComercio }) |
+    @Html.ActionLink("Volver a la lista", "Index")
 </p>

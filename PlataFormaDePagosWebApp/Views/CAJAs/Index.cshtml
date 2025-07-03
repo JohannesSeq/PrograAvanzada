@@ -1,69 +1,46 @@
 ﻿@model IEnumerable<PlataFormaDePagosWebApp.CAJA>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cajas Registradas";
 }
 
-<h2>Index</h2>
+<h2>Cajas Registradas</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Registrar Nueva Caja", "Create", null, new { @class = "btn btn-primary" })
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TelefonoSINPE)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDeModificacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Estado)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descripcion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TelefonoSINPE)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeModificacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Estado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.COMERCIO.Identificacion)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdCaja }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdCaja }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdCaja })
-        </td>
-    </tr>
-}
-
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+            <th>Descripción</th>
+            <th>@Html.DisplayNameFor(model => model.TelefonoSINPE)</th>
+            <th>@Html.DisplayNameFor(model => model.FechaDeRegistro)</th>
+            <th>@Html.DisplayNameFor(model => model.Estado)</th>
+            <th>Comercio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>
+                    @(item.Descripcion != null && item.Descripcion.Length > 10
+                        ? item.Descripcion.Substring(0, 10) + "..."
+                        : item.Descripcion)
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.TelefonoSINPE)</td>
+                <td>@Html.DisplayFor(modelItem => item.FechaDeRegistro)</td>
+                <td>@(item.Estado ? "Activo" : "Inactivo")</td>
+                <td>@Html.DisplayFor(modelItem => item.COMERCIO.Identificacion)</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IdCaja }) |
+                    @Html.ActionLink("Ver SINPE", "VerSinpe", "CAJAs", new { telefono = item.TelefonoSINPE }, null)
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

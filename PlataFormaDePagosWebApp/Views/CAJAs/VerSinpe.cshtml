@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PlataFormaDePagosWebApp.SINPE>
+
+@{
+    ViewBag.Title = "Pagos recibidos por SINPE";
+}
+
+<h2>Pagos recibidos por SINPE</h2>
+<h4>Número de teléfono: @ViewBag.Telefono</h4>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Teléfono Origen</th>
+            <th>Nombre Origen</th>
+            <th>Teléfono Destinatario</th>
+            <th>Nombre Destinatario</th>
+            <th>Monto</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TelefonoOrigen</td>
+                <td>@item.NombreOrigen</td>
+                <td>@item.TelefonoDestinatario</td>
+                <td>@item.NombreDestinatario</td>
+                <td>@item.Monto.ToString("C")</td>
+                <td>@item.Descripcion</td>
+                <td>@item.FechaDeRegistro.ToString("g")</td>
+                <td>@(item.Estado ? "Sincronizado" : "No sincronizado")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    @Html.ActionLink("Volver a Cajas", "Index", null, new { @class = "btn btn-default" })
+</p>

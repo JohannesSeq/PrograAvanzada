@@ -1,81 +1,51 @@
 ﻿@model IEnumerable<PlataFormaDePagosWebApp.SINPE>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Pagos SINPE";
+
+    Func<bool, string> estadoTexto = estado => estado ? "Sincronizado" : "No sincronizado";
 }
 
-<h2>Index</h2>
+<h2>Pagos SINPE</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Registrar nuevo pago", "Create", null, new { @class = "btn btn-primary" })
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TelefonoOrigen)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NombreOrigen)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TelefonoDestinatario)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NombreDestinatario)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Monto)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDeModificacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Estado)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TelefonoOrigen)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NombreOrigen)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TelefonoDestinatario)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NombreDestinatario)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Monto)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descripcion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeModificacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Estado)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdSinpe }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdSinpe }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdSinpe })
-        </td>
-    </tr>
-}
-
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().TelefonoOrigen)</th>
+            <th>@Html.DisplayNameFor(model => model.First().NombreOrigen)</th>
+            <th>@Html.DisplayNameFor(model => model.First().TelefonoDestinatario)</th>
+            <th>@Html.DisplayNameFor(model => model.First().NombreDestinatario)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Monto)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Descripcion)</th>
+            <th>@Html.DisplayName("Fecha de Registro")</th>
+            <th>@Html.DisplayName("Fecha de Modificación")</th>
+            <th>@Html.DisplayName("Estado")</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderByDescending(x => x.FechaDeRegistro))
+        {
+            <tr>
+                <td>@item.TelefonoOrigen</td>
+                <td>@item.NombreOrigen</td>
+                <td>@item.TelefonoDestinatario</td>
+                <td>@item.NombreDestinatario</td>
+                <td>@item.Monto.ToString("C")</td>
+                <td>@item.Descripcion</td>
+                <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@(item.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                <td>@estadoTexto(item.Estado)</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IdSinpe }, new { @class = "btn btn-sm btn-warning" }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IdSinpe }, new { @class = "btn btn-sm btn-info" }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.IdSinpe }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
