@@ -12,17 +12,20 @@ namespace PlataFormaDePagosWebApp
     using System;
     using System.Collections.Generic;
     
-    public partial class SINPE
+    public partial class USUARIO
     {
-        public int IdSinpe { get; set; }
-        public string TelefonoOrigen { get; set; }
-        public string NombreOrigen { get; set; }
-        public string TelefonoDestinatario { get; set; }
-        public string NombreDestinatario { get; set; }
-        public decimal Monto { get; set; }
-        public string Descripcion { get; set; }
+        public int IdUsuario { get; set; }
+        public Nullable<int> IdComercio { get; set; }
+        public Nullable<System.Guid> IdNetUser { get; set; }
+        public string Nombres { get; set; }
+        public string PrimerApellido { get; set; }
+        public string SegundoApellido { get; set; }
+        public string Identificación { get; set; }
+        public string CorreoElectronico { get; set; }
         public System.DateTime FechaDeRegistro { get; set; }
-        public Nullable<System.DateTime> FechaDeModificacion { get; set; }
+        public System.DateTime FechaDeModificacion { get; set; }
         public bool Estado { get; set; }
+    
+        public virtual COMERCIO COMERCIO { get; set; }
     }
 }

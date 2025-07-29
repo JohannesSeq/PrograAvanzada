@@ -129,11 +129,16 @@
     <Compile Include="COMERCIO.cs">
       <DependentUpon>ModeloBanco.tt</DependentUpon>
     </Compile>
+    <Compile Include="CONFIGURACION_DE_COMERCIO.cs">
+      <DependentUpon>ModeloBanco.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\BITACORAsController.cs" />
     <Compile Include="Controllers\CAJAsController.cs" />
     <Compile Include="Controllers\COMERCIOsController.cs" />
+    <Compile Include="Controllers\CONFIGURACION_DE_COMERCIOController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SINPEsController.cs" />
+    <Compile Include="Controllers\USUARIOsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -158,6 +163,9 @@
       <DependentUpon>ModeloBanco.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagrams.cs">
+      <DependentUpon>ModeloBanco.tt</DependentUpon>
+    </Compile>
+    <Compile Include="USUARIO.cs">
       <DependentUpon>ModeloBanco.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -246,6 +254,16 @@
     <Content Include="Views\SINPEs\Index.cshtml" />
     <Content Include="Views\CAJAs\VerSinpe.cshtml" />
     <Content Include="Views\BITACORAs\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION_DE_COMERCIO\Create.cshtml" />
+    <Content Include="Views\CONFIGURACION_DE_COMERCIO\Delete.cshtml" />
+    <Content Include="Views\CONFIGURACION_DE_COMERCIO\Details.cshtml" />
+    <Content Include="Views\CONFIGURACION_DE_COMERCIO\Edit.cshtml" />
+    <Content Include="Views\CONFIGURACION_DE_COMERCIO\Index.cshtml" />
+    <Content Include="Views\USUARIOs\Create.cshtml" />
+    <Content Include="Views\USUARIOs\Delete.cshtml" />
+    <Content Include="Views\USUARIOs\Details.cshtml" />
+    <Content Include="Views\USUARIOs\Edit.cshtml" />
+    <Content Include="Views\USUARIOs\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

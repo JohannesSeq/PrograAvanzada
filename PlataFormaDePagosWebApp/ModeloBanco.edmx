@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PROYECTO_BANCO_LOS_PATITOSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PROYECTO_BANCO_LOS_PATITOSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BITACORA">
           <Key>
             <PropertyRef Name="IdEvento" />
@@ -47,6 +47,25 @@
           <Property Name="FechaDeModificacion" Type="datetime" />
           <Property Name="Estado" Type="bit" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PROYECTO_BANCO_LOS_PATITOS.dbo.CONFIGURACION_DE_COMERCIO' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CONFIGURACION_DE_COMERCIO">
+          <Key>
+            <PropertyRef Name="idConfiguracion" />
+            <PropertyRef Name="TipoConfiguracion" />
+            <PropertyRef Name="Comision" />
+            <PropertyRef Name="FechaDeRegistro" />
+            <PropertyRef Name="FechaDeModificacion" />
+            <PropertyRef Name="Estado" />
+          </Key>
+          <Property Name="idConfiguracion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdComercio" Type="int" />
+          <Property Name="TipoConfiguracion" Type="int" Nullable="false" />
+          <Property Name="Comision" Type="int" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="datetime" Nullable="false" />
+          <Property Name="FechaDeModificacion" Type="datetime" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="SINPE">
           <Key>
             <PropertyRef Name="IdSinpe" />
@@ -72,6 +91,32 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PROYECTO_BANCO_LOS_PATITOS.dbo.USUARIO' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="Nombres" />
+            <PropertyRef Name="PrimerApellido" />
+            <PropertyRef Name="SegundoApellido" />
+            <PropertyRef Name="Identificación" />
+            <PropertyRef Name="CorreoElectronico" />
+            <PropertyRef Name="FechaDeRegistro" />
+            <PropertyRef Name="FechaDeModificacion" />
+            <PropertyRef Name="Estado" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdComercio" Type="int" />
+          <Property Name="IdNetUser" Type="uniqueidentifier" />
+          <Property Name="Nombres" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PrimerApellido" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="SegundoApellido" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Identificación" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CorreoElectronico" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="datetime" Nullable="false" />
+          <Property Name="FechaDeModificacion" Type="datetime" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+        </EntityType>
         <Association Name="CAJA_CMERCIO_PK">
           <End Role="COMERCIO" Type="Self.COMERCIO" Multiplicity="0..1" />
           <End Role="CAJA" Type="Self.CAJA" Multiplicity="*" />
@@ -84,19 +129,76 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="CMERCIO_CONF_PK">
+          <End Role="COMERCIO" Type="Self.COMERCIO" Multiplicity="0..1" />
+          <End Role="CONFIGURACION_DE_COMERCIO" Type="Self.CONFIGURACION_DE_COMERCIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Principal>
+            <Dependent Role="CONFIGURACION_DE_COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="COMERCIO_USUARIO_FK">
+          <End Role="COMERCIO" Type="Self.COMERCIO" Multiplicity="0..1" />
+          <End Role="USUARIO" Type="Self.USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="IdComercio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="PROYECTO_BANCO_LOS_PATITOSModelStoreContainer">
           <EntitySet Name="BITACORA" EntityType="Self.BITACORA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CAJA" EntityType="Self.CAJA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMERCIO" EntityType="Self.COMERCIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SINPE" EntityType="Self.SINPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONFIGURACION_DE_COMERCIO" EntityType="Self.CONFIGURACION_DE_COMERCIO" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CONFIGURACION_DE_COMERCIO].[idConfiguracion] AS [idConfiguracion], 
+    [CONFIGURACION_DE_COMERCIO].[IdComercio] AS [IdComercio], 
+    [CONFIGURACION_DE_COMERCIO].[TipoConfiguracion] AS [TipoConfiguracion], 
+    [CONFIGURACION_DE_COMERCIO].[Comision] AS [Comision], 
+    [CONFIGURACION_DE_COMERCIO].[FechaDeRegistro] AS [FechaDeRegistro], 
+    [CONFIGURACION_DE_COMERCIO].[FechaDeModificacion] AS [FechaDeModificacion], 
+    [CONFIGURACION_DE_COMERCIO].[Estado] AS [Estado]
+    FROM [dbo].[CONFIGURACION_DE_COMERCIO] AS [CONFIGURACION_DE_COMERCIO]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="USUARIO" EntityType="Self.USUARIO" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [USUARIO].[IdUsuario] AS [IdUsuario], 
+    [USUARIO].[IdComercio] AS [IdComercio], 
+    [USUARIO].[IdNetUser] AS [IdNetUser], 
+    [USUARIO].[Nombres] AS [Nombres], 
+    [USUARIO].[PrimerApellido] AS [PrimerApellido], 
+    [USUARIO].[SegundoApellido] AS [SegundoApellido], 
+    [USUARIO].[Identificación] AS [Identificación], 
+    [USUARIO].[CorreoElectronico] AS [CorreoElectronico], 
+    [USUARIO].[FechaDeRegistro] AS [FechaDeRegistro], 
+    [USUARIO].[FechaDeModificacion] AS [FechaDeModificacion], 
+    [USUARIO].[Estado] AS [Estado]
+    FROM [dbo].[USUARIO] AS [USUARIO]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="CAJA_CMERCIO_PK" Association="Self.CAJA_CMERCIO_PK">
             <End Role="COMERCIO" EntitySet="COMERCIO" />
             <End Role="CAJA" EntitySet="CAJA" />
           </AssociationSet>
+          <AssociationSet Name="CMERCIO_CONF_PK" Association="Self.CMERCIO_CONF_PK">
+            <End Role="COMERCIO" EntitySet="COMERCIO" />
+            <End Role="CONFIGURACION_DE_COMERCIO" EntitySet="CONFIGURACION_DE_COMERCIO" />
+          </AssociationSet>
+          <AssociationSet Name="COMERCIO_USUARIO_FK" Association="Self.COMERCIO_USUARIO_FK">
+            <End Role="COMERCIO" EntitySet="COMERCIO" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PROYECTO_BANCO_LOS_PATITOSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -143,6 +245,8 @@
           <Property Name="FechaDeModificacion" Type="DateTime" Precision="3" />
           <Property Name="Estado" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CAJA" Relationship="Self.CAJA_CMERCIO_PK" FromRole="COMERCIO" ToRole="CAJA" />
+          <NavigationProperty Name="CONFIGURACION_DE_COMERCIO" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.CMERCIO_CONF_PK" FromRole="COMERCIO" ToRole="CONFIGURACION_DE_COMERCIO" />
+          <NavigationProperty Name="USUARIO" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK" FromRole="COMERCIO" ToRole="USUARIO" />
         </EntityType>
         <EntityType Name="SINPE">
           <Key>
@@ -191,7 +295,84 @@
             <End Role="COMERCIO" EntitySet="COMERCIO" />
             <End Role="CAJA" EntitySet="CAJA" />
           </AssociationSet>
+          <EntitySet Name="CONFIGURACION_DE_COMERCIO" EntityType="PROYECTO_BANCO_LOS_PATITOSModel.CONFIGURACION_DE_COMERCIO" />
+          <AssociationSet Name="CMERCIO_CONF_PK" Association="PROYECTO_BANCO_LOS_PATITOSModel.CMERCIO_CONF_PK">
+            <End Role="COMERCIO" EntitySet="COMERCIO" />
+            <End Role="CONFIGURACION_DE_COMERCIO" EntitySet="CONFIGURACION_DE_COMERCIO" />
+          </AssociationSet>
+          <EntitySet Name="USUARIO" EntityType="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO" />
+          <AssociationSet Name="COMERCIO_USUARIO_FK" Association="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK">
+            <End Role="COMERCIO" EntitySet="COMERCIO" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="CONFIGURACION_DE_COMERCIO">
+          <Key>
+            <PropertyRef Name="idConfiguracion" />
+            <PropertyRef Name="TipoConfiguracion" />
+            <PropertyRef Name="Comision" />
+            <PropertyRef Name="FechaDeRegistro" />
+            <PropertyRef Name="FechaDeModificacion" />
+            <PropertyRef Name="Estado" />
+          </Key>
+          <Property Name="idConfiguracion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdComercio" Type="Int32" />
+          <Property Name="TipoConfiguracion" Type="Int32" Nullable="false" />
+          <Property Name="Comision" Type="Int32" Nullable="false" />
+          <Property Name="FechaDeRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaDeModificacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="COMERCIO" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.CMERCIO_CONF_PK" FromRole="CONFIGURACION_DE_COMERCIO" ToRole="COMERCIO" />
+        </EntityType>
+        <Association Name="CMERCIO_CONF_PK">
+          <End Type="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO" Role="COMERCIO" Multiplicity="0..1" />
+          <End Type="PROYECTO_BANCO_LOS_PATITOSModel.CONFIGURACION_DE_COMERCIO" Role="CONFIGURACION_DE_COMERCIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Principal>
+            <Dependent Role="CONFIGURACION_DE_COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="Nombres" />
+            <PropertyRef Name="PrimerApellido" />
+            <PropertyRef Name="SegundoApellido" />
+            <PropertyRef Name="Identificación" />
+            <PropertyRef Name="CorreoElectronico" />
+            <PropertyRef Name="FechaDeRegistro" />
+            <PropertyRef Name="FechaDeModificacion" />
+            <PropertyRef Name="Estado" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdComercio" Type="Int32" />
+          <Property Name="IdNetUser" Type="Guid" />
+          <Property Name="Nombres" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PrimerApellido" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SegundoApellido" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Identificación" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CorreoElectronico" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FechaDeRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaDeModificacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="COMERCIO" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK" FromRole="USUARIO" ToRole="COMERCIO" />
+        </EntityType>
+        <Association Name="COMERCIO_USUARIO_FK">
+          <End Type="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO" Role="COMERCIO" Multiplicity="0..1" />
+          <End Type="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO" Role="USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="IdComercio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -267,6 +448,36 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONFIGURACION_DE_COMERCIO">
+            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.CONFIGURACION_DE_COMERCIO">
+              <MappingFragment StoreEntitySet="CONFIGURACION_DE_COMERCIO">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="FechaDeModificacion" ColumnName="FechaDeModificacion" />
+                <ScalarProperty Name="FechaDeRegistro" ColumnName="FechaDeRegistro" />
+                <ScalarProperty Name="Comision" ColumnName="Comision" />
+                <ScalarProperty Name="TipoConfiguracion" ColumnName="TipoConfiguracion" />
+                <ScalarProperty Name="IdComercio" ColumnName="IdComercio" />
+                <ScalarProperty Name="idConfiguracion" ColumnName="idConfiguracion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USUARIO">
+            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO">
+              <MappingFragment StoreEntitySet="USUARIO">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="FechaDeModificacion" ColumnName="FechaDeModificacion" />
+                <ScalarProperty Name="FechaDeRegistro" ColumnName="FechaDeRegistro" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="Identificación" ColumnName="Identificación" />
+                <ScalarProperty Name="SegundoApellido" ColumnName="SegundoApellido" />
+                <ScalarProperty Name="PrimerApellido" ColumnName="PrimerApellido" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="IdNetUser" ColumnName="IdNetUser" />
+                <ScalarProperty Name="IdComercio" ColumnName="IdComercio" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

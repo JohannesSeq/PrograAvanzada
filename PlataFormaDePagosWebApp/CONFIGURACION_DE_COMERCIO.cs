@@ -12,12 +12,16 @@ namespace PlataFormaDePagosWebApp
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class CONFIGURACION_DE_COMERCIO
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int idConfiguracion { get; set; }
+        public Nullable<int> IdComercio { get; set; }
+        public int TipoConfiguracion { get; set; }
+        public int Comision { get; set; }
+        public System.DateTime FechaDeRegistro { get; set; }
+        public System.DateTime FechaDeModificacion { get; set; }
+        public bool Estado { get; set; }
+    
+        public virtual COMERCIO COMERCIO { get; set; }
     }
 }

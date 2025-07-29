@@ -82,3 +82,19 @@ GO
 ALTER TABLE BITACORA
 ADD CONSTRAINT BITACORA_PK PRIMARY KEY (IdEvento)
 GO
+
+CREATE TABLE CONFIGURACION_DE_COMERCIO(
+	idConfiguracion int identity (1,1) not null,
+	IdComercio int,
+	TipoConfiguracion int not null,
+	Comision int not null,
+	FechaDeRegistro datetime not null,
+	FechaDeModificacion datetime not null,
+	Estado bit not null
+);
+
+GO
+
+ALTER TABLE CONFIGURACION_DE_COMERCIO
+ADD CONSTRAINT CMERCIO_CONF_PK FOREIGN KEY (IdComercio)  REFERENCES COMERCIO (IdComercio)
+GO
