@@ -83,6 +83,8 @@ ALTER TABLE BITACORA
 ADD CONSTRAINT BITACORA_PK PRIMARY KEY (IdEvento)
 GO
 
+--Avance 2
+
 CREATE TABLE CONFIGURACION_DE_COMERCIO(
 	idConfiguracion int identity (1,1) not null,
 	IdComercio int,
@@ -97,4 +99,24 @@ GO
 
 ALTER TABLE CONFIGURACION_DE_COMERCIO
 ADD CONSTRAINT CMERCIO_CONF_PK FOREIGN KEY (IdComercio)  REFERENCES COMERCIO (IdComercio)
+GO
+
+
+CREATE TABLE USUARIO(
+	IdUsuario int identity (1,1) not null,
+	IdComercio int,
+	IdNetUser Uniqueidentifier DEFAULT NEWID(),
+	Nombres varchar (100) not null,
+	PrimerApellido varchar(100) not null,
+	SegundoApellido varchar(100) not null,
+	Identificación varchar(10) not null,
+	CorreoElectronico varchar(200) not null,
+	FechaDeRegistro datetime not null,
+	FechaDeModificacion datetime not null,
+	Estado bit not null
+);
+GO
+
+ALTER TABLE USUARIO
+ADD CONSTRAINT COMERCIO_USUARIO_FK FOREIGN KEY (IdComercio)  REFERENCES COMERCIO (IdComercio)
 GO
