@@ -101,6 +101,8 @@ ALTER TABLE CONFIGURACION_DE_COMERCIO
 ADD CONSTRAINT CMERCIO_CONF_PK FOREIGN KEY (IdComercio)  REFERENCES COMERCIO (IdComercio)
 GO
 
+ALTER TABLE CONFIGURACION_DE_COMERCIO
+ADD CONSTRAINT PK_CONFIGURACION PRIMARY KEY (idConfiguracion);
 
 CREATE TABLE USUARIO(
 	IdUsuario int identity (1,1) not null,
@@ -109,7 +111,7 @@ CREATE TABLE USUARIO(
 	Nombres varchar (100) not null,
 	PrimerApellido varchar(100) not null,
 	SegundoApellido varchar(100) not null,
-	Identificación varchar(10) not null,
+	Identificaci n varchar(10) not null,
 	CorreoElectronico varchar(200) not null,
 	FechaDeRegistro datetime not null,
 	FechaDeModificacion datetime not null,

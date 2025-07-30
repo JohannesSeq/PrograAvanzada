@@ -1,33 +1,40 @@
 ﻿@model IEnumerable<PlataFormaDePagosWebApp.CONFIGURACION_DE_COMERCIO>
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Configuraciones de Comercio";
 }
+<h2>Configuraciones de Comercio</h2>
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.COMERCIO.Identificacion)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
-
+    <thead>
+        <tr>
+            <th>Comercio</th>
+            <th>Tipo de Configuración</th>
+            <th>Comisión</th>
+            <th>Fecha Registro</th>
+            <th>Fecha Modificación</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.COMERCIO.Nombre</td>
+                <td>
+                    @(item.TipoConfiguracion == 1 ? "Plataforma" :
+                  item.TipoConfiguracion == 2 ? "Externa" : "Ambas")
+                </td>
+                <td>@item.Comision%</td>
+                <td>@item.FechaDeRegistro.ToString("g")</td>
+                <td>@item.FechaDeModificacion?.ToString("g")</td>
+                <td>@(item.Estado ? "Activo" : "Inactivo")</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.idConfiguracion })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+<p>@Html.ActionLink("Nueva configuración", "Create")</p>

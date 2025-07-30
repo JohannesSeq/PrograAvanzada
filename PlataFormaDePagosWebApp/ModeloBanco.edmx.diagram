@@ -9,12 +9,11 @@
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.CAJA" Width="1.5" PointX="3.625" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.SINPE" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
         <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.CAJA_CMERCIO_PK" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.CONFIGURACION_DE_COMERCIO" Width="1.5" PointX="3.25" PointY="8.625" />
-        <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.CMERCIO_CONF_PK" />
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO" Width="1.5" PointX="3" PointY="12.25" />
         <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.CONFIGURACION_DE_COMERCIO" Width="1.5" PointX="3" PointY="5.625" />
+        <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.CMERCIO_CONF_PK" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

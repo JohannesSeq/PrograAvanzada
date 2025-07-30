@@ -17,116 +17,71 @@ namespace PlataFormaDePagosWebApp.Controllers
         // GET: CONFIGURACION_DE_COMERCIO
         public ActionResult Index()
         {
-            var cONFIGURACION_DE_COMERCIO = db.CONFIGURACION_DE_COMERCIO.Include(c => c.COMERCIO);
-            return View(cONFIGURACION_DE_COMERCIO.ToList());
-        }
-
-        // GET: CONFIGURACION_DE_COMERCIO/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CONFIGURACION_DE_COMERCIO cONFIGURACION_DE_COMERCIO = db.CONFIGURACION_DE_COMERCIO.Find(id);
-            if (cONFIGURACION_DE_COMERCIO == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cONFIGURACION_DE_COMERCIO);
+            var configuraciones = db.CONFIGURACION_DE_COMERCIO.Include(c => c.COMERCIO).ToList();
+            return View(configuraciones);
         }
 
         // GET: CONFIGURACION_DE_COMERCIO/Create
         public ActionResult Create()
         {
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion");
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Nombre");
             return View();
         }
 
         // POST: CONFIGURACION_DE_COMERCIO/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "idConfiguracion,IdComercio,TipoConfiguracion,Comision,FechaDeRegistro,FechaDeModificacion,Estado")] CONFIGURACION_DE_COMERCIO cONFIGURACION_DE_COMERCIO)
+        public ActionResult Create(CONFIGURACION_DE_COMERCIO configuracion)
         {
+            if (db.CONFIGURACION_DE_COMERCIO.Any(c => c.IdComercio == configuracion.IdComercio))
+            {
+                ModelState.AddModelError("", "Ya existe una configuración para este comercio.");
+            }
+
             if (ModelState.IsValid)
             {
-                db.CONFIGURACION_DE_COMERCIO.Add(cONFIGURACION_DE_COMERCIO);
+                configuracion.FechaDeRegistro = DateTime.Now;
+                configuracion.Estado = true;
+                db.CONFIGURACION_DE_COMERCIO.Add(configuracion);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", cONFIGURACION_DE_COMERCIO.IdComercio);
-            return View(cONFIGURACION_DE_COMERCIO);
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Nombre", configuracion.IdComercio);
+            return View(configuracion);
         }
 
         // GET: CONFIGURACION_DE_COMERCIO/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CONFIGURACION_DE_COMERCIO cONFIGURACION_DE_COMERCIO = db.CONFIGURACION_DE_COMERCIO.Find(id);
-            if (cONFIGURACION_DE_COMERCIO == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", cONFIGURACION_DE_COMERCIO.IdComercio);
-            return View(cONFIGURACION_DE_COMERCIO);
+            if (id == null) return HttpNotFound();
+
+            CONFIGURACION_DE_COMERCIO config = db.CONFIGURACION_DE_COMERCIO.Find(id);
+            if (config == null) return HttpNotFound();
+
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Nombre", config.IdComercio);
+            return View(config);
         }
 
         // POST: CONFIGURACION_DE_COMERCIO/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "idConfiguracion,IdComercio,TipoConfiguracion,Comision,FechaDeRegistro,FechaDeModificacion,Estado")] CONFIGURACION_DE_COMERCIO cONFIGURACION_DE_COMERCIO)
+        public ActionResult Edit(CONFIGURACION_DE_COMERCIO configuracion)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(cONFIGURACION_DE_COMERCIO).State = EntityState.Modified;
+                var original = db.CONFIGURACION_DE_COMERCIO.Find(configuracion.idConfiguracion);
+                original.TipoConfiguracion = configuracion.TipoConfiguracion;
+                original.Comision = configuracion.Comision;
+                original.Estado = configuracion.Estado;
+                original.FechaDeModificacion = DateTime.Now;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", cONFIGURACION_DE_COMERCIO.IdComercio);
-            return View(cONFIGURACION_DE_COMERCIO);
-        }
 
-        // GET: CONFIGURACION_DE_COMERCIO/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CONFIGURACION_DE_COMERCIO cONFIGURACION_DE_COMERCIO = db.CONFIGURACION_DE_COMERCIO.Find(id);
-            if (cONFIGURACION_DE_COMERCIO == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cONFIGURACION_DE_COMERCIO);
-        }
-
-        // POST: CONFIGURACION_DE_COMERCIO/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            CONFIGURACION_DE_COMERCIO cONFIGURACION_DE_COMERCIO = db.CONFIGURACION_DE_COMERCIO.Find(id);
-            db.CONFIGURACION_DE_COMERCIO.Remove(cONFIGURACION_DE_COMERCIO);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Nombre", configuracion.IdComercio);
+            return View(configuracion);
         }
     }
 }

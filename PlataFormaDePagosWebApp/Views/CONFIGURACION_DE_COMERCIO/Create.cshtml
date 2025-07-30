@@ -1,82 +1,28 @@
 ﻿@model PlataFormaDePagosWebApp.CONFIGURACION_DE_COMERCIO
-
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Nueva Configuración";
 }
+<h2>Nueva Configuración</h2>
 
-<h2>Create</h2>
-
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
     <div class="form-horizontal">
-        <h4>CONFIGURACION_DE_COMERCIO</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.IdComercio, "IdComercio", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("IdComercio", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.IdComercio, "", new { @class = "text-danger" })
-            </div>
+            @Html.LabelFor(model => model.IdComercio)
+            @Html.DropDownList("IdComercio", null, "Seleccione comercio", new { @class = "form-control" })
         </div>
-
         <div class="form-group">
-            @Html.LabelFor(model => model.TipoConfiguracion, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TipoConfiguracion, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TipoConfiguracion, "", new { @class = "text-danger" })
-            </div>
+            @Html.LabelFor(model => model.TipoConfiguracion)
+            @Html.DropDownListFor(model => model.TipoConfiguracion, new SelectList(new[]{
+                new {Value=1, Text="Plataforma"},
+                new {Value=2, Text="Externa"},
+                new {Value=3, Text="Ambas"}}, "Value", "Text"), "Seleccione", new { @class = "form-control" })
         </div>
-
         <div class="form-group">
-            @Html.LabelFor(model => model.Comision, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Comision, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Comision, "", new { @class = "text-danger" })
-            </div>
+            @Html.LabelFor(model => model.Comision)
+            @Html.EditorFor(model => model.Comision, new { htmlAttributes = new { @class = "form-control" } })
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.FechaDeRegistro, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FechaDeRegistro, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FechaDeRegistro, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.FechaDeModificacion, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FechaDeModificacion, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FechaDeModificacion, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Estado)
-                    @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+        <input type="submit" value="Guardar" class="btn btn-primary" />
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }
