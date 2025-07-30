@@ -1,0 +1,58 @@
+﻿@model PlataFormaDePagosWebApp.REPORTESMENSUALES
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>REPORTESMENSUALES</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CantidadDeCajas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CantidadDeCajas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MontoTotalRecaudado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MontoTotalRecaudado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MontoTotalComision)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MontoTotalComision)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDelReporte)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaDelReporte)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.COMERCIO.Identificacion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdReporte }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -12,15 +12,12 @@ namespace PlataFormaDePagosWebApp
     using System;
     using System.Collections.Generic;
     
-    public partial class BITACORA
+    public partial class sysdiagrams
     {
-        public int IdEvento { get; set; }
-        public string TablaDeEvento { get; set; }
-        public string TipoDeEvento { get; set; }
-        public System.DateTime FechaDeEvento { get; set; }
-        public string DescripcionDeEvento { get; set; }
-        public string StackTrace { get; set; }
-        public string DatosAnteriores { get; set; }
-        public string DatosPosteriores { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

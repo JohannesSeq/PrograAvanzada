@@ -12,15 +12,15 @@ namespace PlataFormaDePagosWebApp
     using System;
     using System.Collections.Generic;
     
-    public partial class BITACORA
+    public partial class REPORTESMENSUALES
     {
-        public int IdEvento { get; set; }
-        public string TablaDeEvento { get; set; }
-        public string TipoDeEvento { get; set; }
-        public System.DateTime FechaDeEvento { get; set; }
-        public string DescripcionDeEvento { get; set; }
-        public string StackTrace { get; set; }
-        public string DatosAnteriores { get; set; }
-        public string DatosPosteriores { get; set; }
+        public int IdReporte { get; set; }
+        public int IdComercio { get; set; }
+        public int CantidadDeCajas { get; set; }
+        public int MontoTotalRecaudado { get; set; }
+        public decimal MontoTotalComision { get; set; }
+        public System.DateTime FechaDelReporte { get; set; }
+    
+        public virtual COMERCIO COMERCIO { get; set; }
     }
 }
