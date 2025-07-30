@@ -27,7 +27,7 @@
                 </td>
                 <td>@item.Comision%</td>
                 <td>@item.FechaDeRegistro.ToString("g")</td>
-                <td>@item.FechaDeModificacion?.ToString("g")</td>
+                <td>@item.FechaDeModificacion.ToString("g")</td>
                 <td>@(item.Estado ? "Activo" : "Inactivo")</td>
                 <td>
                     @Html.ActionLink("Editar", "Edit", new { id = item.idConfiguracion })

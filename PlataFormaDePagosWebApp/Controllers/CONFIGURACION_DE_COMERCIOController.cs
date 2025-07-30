@@ -41,6 +41,7 @@ namespace PlataFormaDePagosWebApp.Controllers
             if (ModelState.IsValid)
             {
                 configuracion.FechaDeRegistro = DateTime.Now;
+                configuracion.FechaDeModificacion = DateTime.Now;
                 configuracion.Estado = true;
                 db.CONFIGURACION_DE_COMERCIO.Add(configuracion);
                 db.SaveChanges();
