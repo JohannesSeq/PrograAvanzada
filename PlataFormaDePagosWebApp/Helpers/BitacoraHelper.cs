@@ -35,9 +35,23 @@ namespace PlataFormaDePagosWebApp.Helpers
             }
             catch (Exception ex)
             {
-                // En caso de que falle el registro en bitácora, no lanzar excepción para no romper el flujo principal
-                System.Diagnostics.Debug.WriteLine("Error al registrar en bitácora: " + ex.Message);
+                if (ex is System.Data.Entity.Validation.DbEntityValidationException validationEx)
+                {
+                    foreach (var failure in validationEx.EntityValidationErrors)
+                    {
+                        foreach (var error in failure.ValidationErrors)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[BITACORA] Campo inválido: {error.PropertyName} - {error.ErrorMessage}");
+                        }
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("Error al registrar en bitácora: " + ex.Message);
+                }
             }
+
+
         }
     }
 }
