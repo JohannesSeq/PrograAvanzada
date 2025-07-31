@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PlataFormaDePagosWebApp;
+using PlataFormaDePagosWebApp.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,7 +8,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using PlataFormaDePagosWebApp;
 
 namespace PlataFormaDePagosWebApp.Controllers
 {
@@ -48,12 +49,40 @@ namespace PlataFormaDePagosWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdUsuario,IdComercio,IdNetUser,Nombres,PrimerApellido,SegundoApellido,Identificación,CorreoElectronico,FechaDeRegistro,FechaDeModificacion,Estado")] USUARIO uSUARIO)
+        public ActionResult Create([Bind(Include = "IdComercio,Nombres,PrimerApellido,SegundoApellido,Identificación,CorreoElectronico")] USUARIO uSUARIO)
         {
             if (ModelState.IsValid)
             {
-                db.USUARIO.Add(uSUARIO);
-                db.SaveChanges();
+                uSUARIO.FechaDeRegistro = DateTime.Now;
+                uSUARIO.FechaDeModificacion = DateTime.Now;
+                uSUARIO.Estado = true;
+                uSUARIO.IdNetUser = Guid.NewGuid();
+
+
+                try
+                {
+                    db.USUARIO.Add(uSUARIO);
+                    db.SaveChanges();
+
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "USUARIO",
+                        tipoEvento: "Registrar",
+                        descripcion: $"Usuario creado: {uSUARIO.IdUsuario}",
+                        datosPosteriores: uSUARIO
+                    );
+                }
+                catch (Exception ex)
+                {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "USUARIO",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
+
+                    ModelState.AddModelError("", "Error al guardar: " + ex.Message);
+                }
+
                 return RedirectToAction("Index");
             }
 
@@ -114,9 +143,37 @@ namespace PlataFormaDePagosWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            USUARIO uSUARIO = db.USUARIO.Find(id);
-            db.USUARIO.Remove(uSUARIO);
-            db.SaveChanges();
+
+            try
+            {
+
+                USUARIO uSUARIO = db.USUARIO.Find(id);
+                db.USUARIO.Remove(uSUARIO);
+                db.SaveChanges();
+
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "USUARIO",
+                    tipoEvento: "Eliminar",
+                    descripcion: $"Usuario eliminado: {uSUARIO.IdUsuario}",
+                    datosPosteriores: uSUARIO
+            );
+
+            }
+            catch (Exception ex)
+            {
+
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "USUARIO",
+                    tipoEvento: "Error",
+                    descripcion: ex.Message,
+                    stackTrace: ex.StackTrace
+                );
+
+                ModelState.AddModelError("", "Error al borrar usuario: " + ex.Message);
+
+
+            }
+
             return RedirectToAction("Index");
         }
 
