@@ -20,7 +20,7 @@ namespace PlataFormaDePagosWebApp
         public string Nombres { get; set; }
         public string PrimerApellido { get; set; }
         public string SegundoApellido { get; set; }
-        public string Identificación { get; set; }
+        public string Identificacion { get; set; }
         public string CorreoElectronico { get; set; }
         public System.DateTime FechaDeRegistro { get; set; }
         public System.DateTime FechaDeModificacion { get; set; }

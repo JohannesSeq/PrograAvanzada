@@ -19,8 +19,8 @@ namespace PlataFormaDePagosWebApp
         {
             this.CAJA = new HashSet<CAJA>();
             this.CONFIGURACION_DE_COMERCIO = new HashSet<CONFIGURACION_DE_COMERCIO>();
-            this.USUARIO = new HashSet<USUARIO>();
             this.REPORTESMENSUALES = new HashSet<REPORTESMENSUALES>();
+            this.USUARIO = new HashSet<USUARIO>();
         }
     
         public int IdComercio { get; set; }
@@ -40,8 +40,8 @@ namespace PlataFormaDePagosWebApp
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CONFIGURACION_DE_COMERCIO> CONFIGURACION_DE_COMERCIO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<USUARIO> USUARIO { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<REPORTESMENSUALES> REPORTESMENSUALES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<USUARIO> USUARIO { get; set; }
     }
 }

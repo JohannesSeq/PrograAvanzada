@@ -30,8 +30,8 @@ namespace PlataFormaDePagosWebApp
         public virtual DbSet<COMERCIO> COMERCIO { get; set; }
         public virtual DbSet<SINPE> SINPE { get; set; }
         public virtual DbSet<CONFIGURACION_DE_COMERCIO> CONFIGURACION_DE_COMERCIO { get; set; }
-        public virtual DbSet<USUARIO> USUARIO { get; set; }
         public virtual DbSet<REPORTESMENSUALES> REPORTESMENSUALES { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<USUARIO> USUARIO { get; set; }
     }
 }

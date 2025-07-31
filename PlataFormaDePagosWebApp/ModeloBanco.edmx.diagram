@@ -12,11 +12,11 @@
         <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.CAJA_CMERCIO_PK" ManuallyRouted="false" />
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.CONFIGURACION_DE_COMERCIO" Width="1.5" PointX="3" PointY="5.625" />
         <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.CMERCIO_CONF_PK" />
-        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO" Width="1.5" PointX="3" PointY="13.25" />
-        <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK" />
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES" Width="1.5" PointX="3" PointY="9.625" />
         <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES_FK" />
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.sysdiagrams" Width="1.5" PointX="5.375" PointY="4.75" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO" Width="1.5" PointX="3" PointY="13.25" />
+        <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -49,7 +49,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdComercio,Nombres,PrimerApellido,SegundoApellido,Identificación,CorreoElectronico")] USUARIO uSUARIO)
+        public ActionResult Create([Bind(Include = "IdComercio,Nombres,PrimerApellido,SegundoApellido,Identificacion,CorreoElectronico")] USUARIO uSUARIO)
         {
             if (ModelState.IsValid)
             {
@@ -112,7 +112,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdUsuario,IdComercio,IdNetUser,Nombres,PrimerApellido,SegundoApellido,Identificación,CorreoElectronico,FechaDeRegistro,FechaDeModificacion,Estado")] USUARIO uSUARIO)
+        public ActionResult Edit([Bind(Include = "IdUsuario,IdComercio,IdNetUser,Nombres,PrimerApellido,SegundoApellido,Identificacion,CorreoElectronico,FechaDeRegistro,FechaDeModificacion,Estado")] USUARIO uSUARIO)
         {
             if (ModelState.IsValid)
             {
