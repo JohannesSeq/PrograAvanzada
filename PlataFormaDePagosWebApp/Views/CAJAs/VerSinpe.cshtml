@@ -7,6 +7,10 @@
 <h2>Pagos recibidos por SINPE</h2>
 <h4>Número de teléfono: @ViewBag.Telefono</h4>
 
+<p>
+    @Html.ActionLink("Sincronizar Sinpes", "Sync", "CAJAs", new { telefono = @ViewBag.Telefono }, new { @class = "btn btn-primary" })
+</p>
+
 <table class="table table-striped">
     <thead>
         <tr>
