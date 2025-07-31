@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7476ba2674a546a0ad0bf5b14b83681c" Name="Diagram1" ZoomLevel="82">
+      <Diagram DiagramId="7476ba2674a546a0ad0bf5b14b83681c" Name="Diagram1" ZoomLevel="61">
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.BITACORA" Width="3.125" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.CAJA" Width="1.5" PointX="3.625" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />

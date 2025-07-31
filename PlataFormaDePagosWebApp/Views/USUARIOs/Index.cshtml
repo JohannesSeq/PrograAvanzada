@@ -7,27 +7,39 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Registrar un nuevo usuario", "Create", null, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.IdNetUser)
+            @Html.DisplayNameFor(model => model.Nombres)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
+            @Html.DisplayNameFor(model => model.PrimerApellido)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.CorreoElectronico)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th>
+            Acciones
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.IdNetUser)
+            @Html.DisplayFor(modelItem => item.Nombres)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.COMERCIO.Identificacion)
+            @Html.DisplayFor(modelItem => item.PrimerApellido)
         </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CorreoElectronico)
+        </td>
+        <td>@(item.Estado ? "Activo" : "Inactivo")</td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
             @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |

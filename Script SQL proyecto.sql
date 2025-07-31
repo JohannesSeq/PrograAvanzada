@@ -111,13 +111,15 @@ CREATE TABLE USUARIO(
 	Nombres varchar (100) not null,
 	PrimerApellido varchar(100) not null,
 	SegundoApellido varchar(100) not null,
-	Identificaci n varchar(10) not null,
+	Identificacion varchar(10) not null,
 	CorreoElectronico varchar(200) not null,
 	FechaDeRegistro datetime not null,
 	FechaDeModificacion datetime not null,
 	Estado bit not null
 );
 GO
+
+Insert into USUARIO(IdComercio, Nombres, PrimerApellido,SegundoApellido,)
 
 ALTER TABLE USUARIO
 ADD CONSTRAINT COMERCIO_USUARIO_FK FOREIGN KEY (IdComercio)  REFERENCES COMERCIO (IdComercio)
