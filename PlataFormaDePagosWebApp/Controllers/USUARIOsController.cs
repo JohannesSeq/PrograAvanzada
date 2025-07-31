@@ -102,6 +102,7 @@ namespace PlataFormaDePagosWebApp.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", uSUARIO.IdComercio);
             return View(uSUARIO);
         }
@@ -115,8 +116,33 @@ namespace PlataFormaDePagosWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(uSUARIO).State = EntityState.Modified;
-                db.SaveChanges();
+                uSUARIO.FechaDeModificacion = DateTime.Now;
+
+
+                try
+                {
+                    db.Entry(uSUARIO).State = EntityState.Modified;
+                    db.SaveChanges();
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "USUARIO",
+                        tipoEvento: "Editar",
+                        descripcion: $"Usuario editado: {uSUARIO.IdUsuario}",
+                        datosPosteriores: uSUARIO
+                    );
+
+                }
+                catch (Exception ex) {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "USUARIO",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
+
+                    ModelState.AddModelError("", "Error al editar: " + ex.Message);
+                }
+
+
                 return RedirectToAction("Index");
             }
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", uSUARIO.IdComercio);
@@ -170,7 +196,6 @@ namespace PlataFormaDePagosWebApp.Controllers
                 );
 
                 ModelState.AddModelError("", "Error al borrar usuario: " + ex.Message);
-
 
             }
 

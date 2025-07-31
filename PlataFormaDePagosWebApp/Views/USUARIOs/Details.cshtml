@@ -10,25 +10,42 @@
     <h4>USUARIO</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.IdNetUser)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.IdUsuario)</dt>
+        <dd>@Html.DisplayFor(model => model.IdUsuario)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.IdNetUser)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.IdNetUser)</dt>
+        <dd>@Html.DisplayFor(model => model.IdNetUser)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Nombres)</dt>
+        <dd>@Html.DisplayFor(model => model.Nombres)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.COMERCIO.Identificacion)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.PrimerApellido)</dt>
+        <dd>@Html.DisplayFor(model => model.PrimerApellido)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.SegundoApellido)</dt>
+        <dd>@Html.DisplayFor(model => model.SegundoApellido)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Identificación)</dt>
+        <dd>@Html.DisplayFor(model => model.Identificación)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CorreoElectronico)</dt>
+        <dd>@Html.DisplayFor(model => model.CorreoElectronico)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.COMERCIO.Identificacion)</dt>
+        <dd>@Html.DisplayFor(model => model.COMERCIO.Identificacion)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.FechaDeModificacion)</dt>
+        <dd>@Html.DisplayFor(model => model.FechaDeModificacion)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.FechaDeRegistro)</dt>
+        <dd>@Html.DisplayFor(model => model.FechaDeRegistro)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Estado)</dt>
+        <dd>@Html.DisplayFor(model => model.Estado)</dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IdUsuario }, new { @class = "btn btn-warning" }) |
+    @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default" })
 </p>
