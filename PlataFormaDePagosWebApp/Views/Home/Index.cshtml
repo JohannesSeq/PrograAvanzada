@@ -2,42 +2,61 @@
     ViewBag.Title = "Inicio";
 }
 
-<main>
-    <section class="jumbotron text-center">
-        <h1 class="display-4">SINPE Empresarial</h1>
-        <p class="lead">
+<main class="container my-5">
+    <section class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">SINPE Empresarial</h1>
+        <p class="lead text-muted">
             Plataforma desarrollada para la gestión de pagos electrónicos a través de SINPE.
             Permite a comercios afiliados validar pagos, administrar sus cajas y visualizar transacciones.
         </p>
         <hr class="my-4" />
-        <p>
-            Proyecto académico desarrollado en el curso de Programación Avanzada siguiendo principios de Clean Code, SOLID y arquitectura por capas.
+        <p class="text-secondary">
+            Proyecto académico desarrollado en el curso de <strong>Programación Avanzada</strong> siguiendo principios de
+            <strong>Clean Code</strong>, <strong>SOLID</strong> y <strong>arquitectura por capas</strong>.
         </p>
     </section>
 
-    <div class="row text-center">
+    <div class="row g-4">
         <div class="col-md-4">
-            <h2>Módulo de Comercios</h2>
-            <p>Registra, edita y gestiona comercios afiliados a la plataforma.</p>
-            <p>@Html.ActionLink("Ir al módulo", "Index", "COMERCIOs", new { area = "" }, new { @class = "btn btn-primary" })</p>
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-primary fw-bold">Módulo de Comercios</h4>
+                    <p class="card-text text-muted">Registra, edita y gestiona comercios afiliados a la plataforma.</p>
+                    @Html.ActionLink("Ir al módulo", "Index", "COMERCIOs", new { area = "" }, new { @class = "btn btn-outline-primary btn-lg mt-3 w-100" })
+                </div>
+            </div>
         </div>
+
         <div class="col-md-4">
-            <h2>Módulo de Cajas</h2>
-            <p>Asocia cajas a los comercios y controla los teléfonos SINPE utilizados.</p>
-            <p>@Html.ActionLink("Ir al módulo", "Index", "CAJAs", new { area = "" }, new { @class = "btn btn-primary" })</p>
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-success fw-bold">Módulo de Cajas</h4>
+                    <p class="card-text text-muted">Asocia cajas a los comercios y controla los teléfonos SINPE utilizados.</p>
+                    @Html.ActionLink("Ir al módulo", "Index", "CAJAs", new { area = "" }, new { @class = "btn btn-outline-success btn-lg mt-3 w-100" })
+                </div>
+            </div>
         </div>
+
         <div class="col-md-4">
-            <h2>Módulo de SINPE</h2>
-            <p>Registra transacciones electrónicas simuladas hacia los comercios.</p>
-            <p>@Html.ActionLink("Ir al módulo", "Create", "SINPEs", new { area = "" }, new { @class = "btn btn-primary" })</p>
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-info fw-bold">Módulo de SINPE</h4>
+                    <p class="card-text text-muted">Registra transacciones electrónicas simuladas hacia los comercios.</p>
+                    @Html.ActionLink("Ir al módulo", "Create", "SINPEs", new { area = "" }, new { @class = "btn btn-outline-info btn-lg mt-3 w-100" })
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="row text-center mt-4">
+    <div class="row text-center mt-5">
         <div class="col-md-12">
-            <h2>Bitácora de Eventos</h2>
-            <p>Consulta las acciones realizadas en el sistema con fines de trazabilidad.</p>
-            <p>@Html.ActionLink("Ver Bitácora", "Index", "BITACORAs", new { area = "" }, new { @class = "btn btn-secondary" })</p>
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <h4 class="card-title text-dark fw-bold">Bitácora de Eventos</h4>
+                    <p class="card-text text-muted">Consulta las acciones realizadas en el sistema con fines de trazabilidad.</p>
+                    @Html.ActionLink("Ver Bitácora", "Index", "BITACORAs", new { area = "" }, new { @class = "btn btn-dark btn-lg mt-2" })
+                </div>
+            </div>
         </div>
     </div>
 </main>
