@@ -67,6 +67,7 @@
           <Property Name="IdComercio" Type="int" Nullable="false" />
           <Property Name="CantidadDeCajas" Type="int" Nullable="false" />
           <Property Name="MontoTotalRecaudado" Type="int" Nullable="false" />
+          <Property Name="CantidadDeSinpes" Type="int" Nullable="false" />
           <Property Name="MontoTotalComision" Type="decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="FechaDelReporte" Type="datetime" Nullable="false" />
         </EntityType>
@@ -85,19 +86,19 @@
           <Property Name="FechaDeModificacion" Type="datetime" />
           <Property Name="Estado" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PROYECTO_BANCO_LOS_PATITOS.dbo.USUARIO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="USUARIO">
           <Key>
             <PropertyRef Name="IdUsuario" />
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdComercio" Type="int" />
@@ -166,8 +167,21 @@
           <EntitySet Name="CONFIGURACION_DE_COMERCIO" EntityType="Self.CONFIGURACION_DE_COMERCIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="REPORTESMENSUALES" EntityType="Self.REPORTESMENSUALES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SINPE" EntityType="Self.SINPE" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="USUARIO" EntityType="Self.USUARIO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USUARIO" EntityType="Self.USUARIO" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [USUARIO].[IdUsuario] AS [IdUsuario], 
+    [USUARIO].[IdComercio] AS [IdComercio], 
+    [USUARIO].[IdNetUser] AS [IdNetUser], 
+    [USUARIO].[Nombres] AS [Nombres], 
+    [USUARIO].[PrimerApellido] AS [PrimerApellido], 
+    [USUARIO].[SegundoApellido] AS [SegundoApellido], 
+    [USUARIO].[Identificación] AS [Identificación], 
+    [USUARIO].[CorreoElectronico] AS [CorreoElectronico], 
+    [USUARIO].[FechaDeRegistro] AS [FechaDeRegistro], 
+    [USUARIO].[FechaDeModificacion] AS [FechaDeModificacion], 
+    [USUARIO].[Estado] AS [Estado]
+    FROM [dbo].[USUARIO] AS [USUARIO]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="CAJA_CMERCIO_PK" Association="Self.CAJA_CMERCIO_PK">
             <End Role="COMERCIO" EntitySet="COMERCIO" />
             <End Role="CAJA" EntitySet="CAJA" />
@@ -233,8 +247,8 @@
           <Property Name="Estado" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CAJA" Relationship="Self.CAJA_CMERCIO_PK" FromRole="COMERCIO" ToRole="CAJA" />
           <NavigationProperty Name="CONFIGURACION_DE_COMERCIO" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.CMERCIO_CONF_PK" FromRole="COMERCIO" ToRole="CONFIGURACION_DE_COMERCIO" />
-          <NavigationProperty Name="REPORTESMENSUALES" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES_FK" FromRole="COMERCIO" ToRole="REPORTESMENSUALES" />
           <NavigationProperty Name="USUARIO" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK" FromRole="COMERCIO" ToRole="USUARIO" />
+          <NavigationProperty Name="REPORTESMENSUALES" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES_FK" FromRole="COMERCIO" ToRole="REPORTESMENSUALES" />
         </EntityType>
         <EntityType Name="SINPE">
           <Key>
@@ -277,16 +291,15 @@
             <End Role="COMERCIO" EntitySet="COMERCIO" />
             <End Role="CONFIGURACION_DE_COMERCIO" EntitySet="CONFIGURACION_DE_COMERCIO" />
           </AssociationSet>
-          <EntitySet Name="sysdiagrams" EntityType="PROYECTO_BANCO_LOS_PATITOSModel.sysdiagrams" />
-          <EntitySet Name="REPORTESMENSUALES" EntityType="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES" />
-          <AssociationSet Name="REPORTESMENSUALES_FK" Association="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES_FK">
-            <End Role="COMERCIO" EntitySet="COMERCIO" />
-            <End Role="REPORTESMENSUALES" EntitySet="REPORTESMENSUALES" />
-          </AssociationSet>
           <EntitySet Name="USUARIO" EntityType="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO" />
           <AssociationSet Name="COMERCIO_USUARIO_FK" Association="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK">
             <End Role="COMERCIO" EntitySet="COMERCIO" />
             <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+          <EntitySet Name="REPORTESMENSUALES" EntityType="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES" />
+          <AssociationSet Name="REPORTESMENSUALES_FK" Association="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES_FK">
+            <End Role="COMERCIO" EntitySet="COMERCIO" />
+            <End Role="REPORTESMENSUALES" EntitySet="REPORTESMENSUALES" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="CONFIGURACION_DE_COMERCIO">
@@ -310,40 +323,6 @@
               <PropertyRef Name="IdComercio" />
             </Principal>
             <Dependent Role="CONFIGURACION_DE_COMERCIO">
-              <PropertyRef Name="IdComercio" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="REPORTESMENSUALES">
-          <Key>
-            <PropertyRef Name="IdReporte" />
-          </Key>
-          <Property Name="IdReporte" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdComercio" Type="Int32" Nullable="false" />
-          <Property Name="CantidadDeCajas" Type="Int32" Nullable="false" />
-          <Property Name="MontoTotalRecaudado" Type="Int32" Nullable="false" />
-          <Property Name="MontoTotalComision" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="FechaDelReporte" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="COMERCIO" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES_FK" FromRole="REPORTESMENSUALES" ToRole="COMERCIO" />
-        </EntityType>
-        <Association Name="REPORTESMENSUALES_FK">
-          <End Type="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO" Role="COMERCIO" Multiplicity="1" />
-          <End Type="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES" Role="REPORTESMENSUALES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="COMERCIO">
-              <PropertyRef Name="IdComercio" />
-            </Principal>
-            <Dependent Role="REPORTESMENSUALES">
               <PropertyRef Name="IdComercio" />
             </Dependent>
           </ReferentialConstraint>
@@ -373,6 +352,31 @@
               <PropertyRef Name="IdComercio" />
             </Principal>
             <Dependent Role="USUARIO">
+              <PropertyRef Name="IdComercio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="REPORTESMENSUALES">
+          <Key>
+            <PropertyRef Name="IdReporte" />
+          </Key>
+          <Property Name="IdReporte" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdComercio" Type="Int32" Nullable="false" />
+          <Property Name="CantidadDeCajas" Type="Int32" Nullable="false" />
+          <Property Name="MontoTotalRecaudado" Type="Int32" Nullable="false" />
+          <Property Name="CantidadDeSinpes" Type="Int32" Nullable="false" />
+          <Property Name="MontoTotalComision" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="FechaDelReporte" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="COMERCIO" Relationship="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES_FK" FromRole="REPORTESMENSUALES" ToRole="COMERCIO" />
+        </EntityType>
+        <Association Name="REPORTESMENSUALES_FK">
+          <End Type="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO" Role="COMERCIO" Multiplicity="1" />
+          <End Type="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES" Role="REPORTESMENSUALES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMERCIO">
+              <PropertyRef Name="IdComercio" />
+            </Principal>
+            <Dependent Role="REPORTESMENSUALES">
               <PropertyRef Name="IdComercio" />
             </Dependent>
           </ReferentialConstraint>
@@ -457,29 +461,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="REPORTESMENSUALES">
-            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES">
-              <MappingFragment StoreEntitySet="REPORTESMENSUALES">
-                <ScalarProperty Name="FechaDelReporte" ColumnName="FechaDelReporte" />
-                <ScalarProperty Name="MontoTotalComision" ColumnName="MontoTotalComision" />
-                <ScalarProperty Name="MontoTotalRecaudado" ColumnName="MontoTotalRecaudado" />
-                <ScalarProperty Name="CantidadDeCajas" ColumnName="CantidadDeCajas" />
-                <ScalarProperty Name="IdComercio" ColumnName="IdComercio" />
-                <ScalarProperty Name="IdReporte" ColumnName="IdReporte" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="USUARIO">
             <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO">
               <MappingFragment StoreEntitySet="USUARIO">
@@ -494,6 +475,19 @@
                 <ScalarProperty Name="IdNetUser" ColumnName="IdNetUser" />
                 <ScalarProperty Name="IdComercio" ColumnName="IdComercio" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="REPORTESMENSUALES">
+            <EntityTypeMapping TypeName="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES">
+              <MappingFragment StoreEntitySet="REPORTESMENSUALES">
+                <ScalarProperty Name="FechaDelReporte" ColumnName="FechaDelReporte" />
+                <ScalarProperty Name="MontoTotalComision" ColumnName="MontoTotalComision" />
+                <ScalarProperty Name="CantidadDeSinpes" ColumnName="CantidadDeSinpes" />
+                <ScalarProperty Name="MontoTotalRecaudado" ColumnName="MontoTotalRecaudado" />
+                <ScalarProperty Name="CantidadDeCajas" ColumnName="CantidadDeCajas" />
+                <ScalarProperty Name="IdComercio" ColumnName="IdComercio" />
+                <ScalarProperty Name="IdReporte" ColumnName="IdReporte" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

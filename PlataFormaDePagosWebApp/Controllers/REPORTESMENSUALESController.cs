@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using PlataFormaDePagosWebApp;
+using PlataFormaDePagosWebApp.Helpers;
+using Newtonsoft.Json;
 
 namespace PlataFormaDePagosWebApp.Controllers
 {
@@ -14,118 +12,232 @@ namespace PlataFormaDePagosWebApp.Controllers
     {
         private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
 
-        // GET: REPORTESMENSUALES
         public ActionResult Index()
         {
-            var rEPORTESMENSUALES = db.REPORTESMENSUALES.Include(r => r.COMERCIO);
-            return View(rEPORTESMENSUALES.ToList());
+            var reportes = db.REPORTESMENSUALES.Include(r => r.COMERCIO).ToList();
+            return View(reportes);
         }
 
-        // GET: REPORTESMENSUALES/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            REPORTESMENSUALES rEPORTESMENSUALES = db.REPORTESMENSUALES.Find(id);
-            if (rEPORTESMENSUALES == null)
-            {
-                return HttpNotFound();
-            }
-            return View(rEPORTESMENSUALES);
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var reporte = db.REPORTESMENSUALES.Find(id);
+            if (reporte == null) return HttpNotFound();
+            return View(reporte);
         }
 
-        // GET: REPORTESMENSUALES/Create
         public ActionResult Create()
         {
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion");
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial");
             return View();
         }
 
-        // POST: REPORTESMENSUALES/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdReporte,IdComercio,CantidadDeCajas,MontoTotalRecaudado,MontoTotalComision,FechaDelReporte")] REPORTESMENSUALES rEPORTESMENSUALES)
+        public ActionResult Create(REPORTESMENSUALES reporte)
         {
             if (ModelState.IsValid)
             {
-                db.REPORTESMENSUALES.Add(rEPORTESMENSUALES);
+                db.REPORTESMENSUALES.Add(reporte);
                 db.SaveChanges();
+
+                try
+                {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "REPORTES_MENSUAL",
+                        tipoEvento: "Registrar",
+                        descripcion: $"Reporte creado para comercio ID: {reporte.IdComercio}",
+                        datosPosteriores: reporte
+                    );
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error al registrar en bitácora: " + ex.Message);
+                }
+
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", rEPORTESMENSUALES.IdComercio);
-            return View(rEPORTESMENSUALES);
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial", reporte.IdComercio);
+            return View(reporte);
         }
 
-        // GET: REPORTESMENSUALES/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            REPORTESMENSUALES rEPORTESMENSUALES = db.REPORTESMENSUALES.Find(id);
-            if (rEPORTESMENSUALES == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", rEPORTESMENSUALES.IdComercio);
-            return View(rEPORTESMENSUALES);
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var reporte = db.REPORTESMENSUALES.Find(id);
+            if (reporte == null) return HttpNotFound();
+
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial", reporte.IdComercio);
+            return View(reporte);
         }
 
-        // POST: REPORTESMENSUALES/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdReporte,IdComercio,CantidadDeCajas,MontoTotalRecaudado,MontoTotalComision,FechaDelReporte")] REPORTESMENSUALES rEPORTESMENSUALES)
+        public ActionResult Edit(REPORTESMENSUALES reporte)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(rEPORTESMENSUALES).State = EntityState.Modified;
+                var anterior = db.REPORTESMENSUALES.AsNoTracking().FirstOrDefault(r => r.IdReporte == reporte.IdReporte);
+
+                db.Entry(reporte).State = EntityState.Modified;
                 db.SaveChanges();
+
+                try
+                {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "REPORTES_MENSUAL",
+                        tipoEvento: "Editar",
+                        descripcion: $"Reporte editado ID: {reporte.IdReporte}",
+                        datosAnteriores: anterior,
+                        datosPosteriores: reporte
+                    );
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error al registrar en bitácora: " + ex.Message);
+                }
+
                 return RedirectToAction("Index");
             }
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion", rEPORTESMENSUALES.IdComercio);
-            return View(rEPORTESMENSUALES);
+
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial", reporte.IdComercio);
+            return View(reporte);
         }
 
-        // GET: REPORTESMENSUALES/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            REPORTESMENSUALES rEPORTESMENSUALES = db.REPORTESMENSUALES.Find(id);
-            if (rEPORTESMENSUALES == null)
-            {
-                return HttpNotFound();
-            }
-            return View(rEPORTESMENSUALES);
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var reporte = db.REPORTESMENSUALES.Find(id);
+            if (reporte == null) return HttpNotFound();
+
+            return View(reporte);
         }
 
-        // POST: REPORTESMENSUALES/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            REPORTESMENSUALES rEPORTESMENSUALES = db.REPORTESMENSUALES.Find(id);
-            db.REPORTESMENSUALES.Remove(rEPORTESMENSUALES);
+            var reporte = db.REPORTESMENSUALES.Find(id);
+            db.REPORTESMENSUALES.Remove(reporte);
+            db.SaveChanges();
+
+            try
+            {
+                BitacoraHelper.RegistrarEvento(
+                    tabla: "REPORTES_MENSUAL",
+                    tipoEvento: "Eliminar",
+                    descripcion: $"Reporte eliminado ID: {id}",
+                    datosAnteriores: reporte
+                );
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al registrar en bitácora: " + ex.Message);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult GenerarReportes()
+        {
+            var fechaActual = DateTime.Now;
+            var primerDiaMes = new DateTime(fechaActual.Year, fechaActual.Month, 1);
+            var ultimoDiaMes = primerDiaMes.AddMonths(1).AddDays(-1);
+
+            var comercios = db.COMERCIO.Where(c => c.Estado == true).ToList();
+
+            foreach (var comercio in comercios)
+            {
+                var cajas = db.CAJA.Where(c => c.IdComercio == comercio.IdComercio).ToList();
+                var telefonosCaja = cajas.Select(c => c.TelefonoSINPE).ToList();
+
+                var sinpes = db.SINPE
+                    .Where(s => s.Estado == true)
+                    .AsEnumerable() // cambia de LINQ-to-Entities a LINQ-to-Objects
+                    .Where(s =>
+                        telefonosCaja.Contains(s.TelefonoDestinatario) &&
+                        s.FechaDeRegistro >= primerDiaMes &&
+                        s.FechaDeRegistro <= ultimoDiaMes
+                    )
+                    .ToList();
+
+                int cantidadCajas = cajas.Count;
+                int cantidadSinpes = sinpes.Count;
+                int montoRecaudado = (int)sinpes.Sum(s => s.Monto);
+                var config = db.CONFIGURACION_DE_COMERCIO.FirstOrDefault(c => c.IdComercio == comercio.IdComercio);
+                decimal porcentajeComision = config != null ? config.Comision / 100m : 0;
+                decimal montoComision = montoRecaudado * porcentajeComision;
+
+                var existente = db.REPORTESMENSUALES.FirstOrDefault(r =>
+                    r.IdComercio == comercio.IdComercio &&
+                    r.FechaDelReporte.Month == fechaActual.Month &&
+                    r.FechaDelReporte.Year == fechaActual.Year
+                );
+
+                if (existente != null)
+                {
+                    var anterior = JsonConvert.SerializeObject(existente);
+
+                    existente.CantidadDeCajas = cantidadCajas;
+                    existente.CantidadDeSinpes = cantidadSinpes;
+                    existente.MontoTotalRecaudado = montoRecaudado;
+                    existente.MontoTotalComision = montoComision;
+                    existente.FechaDelReporte = fechaActual;
+
+                    try
+                    {
+                        BitacoraHelper.RegistrarEvento(
+                            tabla: "REPORTES_MENSUAL",
+                            tipoEvento: "Actualizar",
+                            descripcion: $"Reporte mensual actualizado para comercio ID: {comercio.IdComercio}",
+                            datosAnteriores: anterior,
+                            datosPosteriores: existente
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Error al registrar bitácora: " + ex.Message);
+                    }
+                }
+                else
+                {
+                    var nuevo = new REPORTESMENSUALES
+                    {
+                        IdComercio = comercio.IdComercio,
+                        CantidadDeCajas = cantidadCajas,
+                        CantidadDeSinpes = cantidadSinpes,
+                        MontoTotalRecaudado = montoRecaudado,
+                        MontoTotalComision = montoComision,
+                        FechaDelReporte = fechaActual
+                    };
+
+                    db.REPORTESMENSUALES.Add(nuevo);
+
+                    try
+                    {
+                        BitacoraHelper.RegistrarEvento(
+                            tabla: "REPORTES_MENSUAL",
+                            tipoEvento: "Generar",
+                            descripcion: $"Reporte mensual generado para comercio ID: {comercio.IdComercio}",
+                            datosPosteriores: nuevo
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Error al registrar bitácora: " + ex.Message);
+                    }
+                }
+            }
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            if (disposing) db.Dispose();
             base.Dispose(disposing);
         }
     }

@@ -1,57 +1,47 @@
 ﻿@model IEnumerable<PlataFormaDePagosWebApp.REPORTESMENSUALES>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Reportes Mensuales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2 class="text-center">Reportes Mensuales</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CantidadDeCajas)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MontoTotalRecaudado)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MontoTotalComision)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDelReporte)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
-        </th>
-        <th></th>
-    </tr>
+<div class="text-right mb-3">
+    @using (Html.BeginForm("GenerarReportes", "REPORTESMENSUALES", FormMethod.Post, new { @class = "d-inline" }))
+    {
+        <button type="submit" class="btn btn-success">Generar Reportes</button>
+    }
+</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CantidadDeCajas)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MontoTotalRecaudado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MontoTotalComision)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDelReporte)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.COMERCIO.Identificacion)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdReporte }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdReporte }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdReporte })
-        </td>
-    </tr>
-}
-
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().COMERCIO.Nombre)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().CantidadDeCajas)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().MontoTotalRecaudado)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().CantidadDeSinpes)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().MontoTotalComision)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().FechaDelReporte)</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.COMERCIO?.NombreComercial</td>
+                <td>@item.CantidadDeCajas</td>
+                <td>₡@item.MontoTotalRecaudado.ToString("N2")</td>
+                <td>@item.CantidadDeSinpes</td>
+                <td>₡@item.MontoTotalComision.ToString("N2")</td>
+                <td>@item.FechaDelReporte.ToString("dd/MM/yyyy")</td>
+                <td class="text-center">
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IdReporte }, new { @class = "btn btn-sm btn-warning" }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IdReporte }, new { @class = "btn btn-sm btn-info" }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.IdReporte }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

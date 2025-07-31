@@ -132,6 +132,7 @@ CREATE TABLE REPORTESMENSUALES(
 	IdComercio int not null,
 	CantidadDeCajas int not null,
 	MontoTotalRecaudado int not null,
+	CantidadDeSinpes int not null,
 	MontoTotalComision decimal not null,
 	FechaDelReporte datetime not null
 );

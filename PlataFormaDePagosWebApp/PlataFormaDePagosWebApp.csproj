@@ -166,9 +166,6 @@
     <Compile Include="SINPE.cs">
       <DependentUpon>ModeloBanco.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagrams.cs">
-      <DependentUpon>ModeloBanco.tt</DependentUpon>
-    </Compile>
     <Compile Include="USUARIO.cs">
       <DependentUpon>ModeloBanco.tt</DependentUpon>
     </Compile>
