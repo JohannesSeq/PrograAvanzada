@@ -2,22 +2,23 @@
 
 @{
     ViewBag.Title = "Cajas Registradas";
+    Func<bool, string> estadoTexto = estado => estado ? "Activo" : "Inactivo";
 }
 
-<h2>Cajas Registradas</h2>
+<h2 class="mb-4">Cajas Registradas</h2>
 
 <p>
-    @Html.ActionLink("Registrar Nueva Caja", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Registrar Nueva Caja", "Create", null, new { @class = "btn btn-primary mb-3" })
 </p>
 
-<table class="table table-striped">
-    <thead>
+<table class="table table-bordered table-striped">
+    <thead style="background-color: #0d6efd; color: white;">
         <tr>
             <th>@Html.DisplayNameFor(model => model.Nombre)</th>
             <th>Descripción</th>
             <th>@Html.DisplayNameFor(model => model.TelefonoSINPE)</th>
             <th>@Html.DisplayNameFor(model => model.FechaDeRegistro)</th>
-            <th>@Html.DisplayNameFor(model => model.Estado)</th>
+            <th>Estado</th>
             <th>Comercio</th>
             <th>Acciones</th>
         </tr>
@@ -26,19 +27,27 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@item.Nombre</td>
                 <td>
-                    @(item.Descripcion != null && item.Descripcion.Length > 10
-                        ? item.Descripcion.Substring(0, 10) + "..."
+                    @(item.Descripcion != null && item.Descripcion.Length > 20
+                        ? item.Descripcion.Substring(0, 20) + "..."
                         : item.Descripcion)
                 </td>
-                <td>@Html.DisplayFor(modelItem => item.TelefonoSINPE)</td>
-                <td>@Html.DisplayFor(modelItem => item.FechaDeRegistro)</td>
-                <td>@(item.Estado ? "Activo" : "Inactivo")</td>
-                <td>@Html.DisplayFor(modelItem => item.COMERCIO.Identificacion)</td>
+                <td>@item.TelefonoSINPE</td>
+                <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.IdCaja }) |
-                    @Html.ActionLink("Ver SINPE", "VerSinpe", "CAJAs", new { telefono = item.TelefonoSINPE }, null)
+                    <span class="badge bg-@(item.Estado ? "success" : "secondary")">
+                        @estadoTexto(item.Estado)
+                    </span>
+                </td>
+                <td>@item.COMERCIO.Identificacion</td>
+                <td class="text-center">
+                    <a href="@Url.Action("Edit", new { id = item.IdCaja })" class="btn btn-warning btn-sm me-1">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a href="@Url.Action("VerSinpe", "CAJAs", new { telefono = item.TelefonoSINPE })" class="btn btn-info btn-sm text-white">
+                        <i class="fas fa-eye"></i> Ver SINPE
+                    </a>
                 </td>
             </tr>
         }
