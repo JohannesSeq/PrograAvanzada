@@ -207,6 +207,56 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(sinpes);
         }
 
+        public ActionResult Sync(string telefono)
+        {
+
+            if (string.IsNullOrEmpty(telefono))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var sinpes = db.SINPE
+                .Where(s => s.TelefonoDestinatario == telefono)
+                .OrderByDescending(s => s.FechaDeRegistro)
+                .ToList();
+
+
+
+            foreach (SINPE s in sinpes)
+            {
+
+                try 
+                {
+                    var anterior = db.SINPE.AsNoTracking().FirstOrDefault(x => x.IdSinpe == s.IdSinpe);
+                    s.FechaDeModificacion = DateTime.Now;
+                    s.Estado = true;
+                    db.Entry(s).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "SINPE",
+                        tipoEvento: "Editar",
+                        descripcion: $"SINPE editado: {s.IdSinpe}",
+                        datosAnteriores: anterior,
+                        datosPosteriores: s
+                    );
+                } 
+                
+                catch (Exception ex)
+                {
+                    BitacoraHelper.RegistrarEvento(
+                        tabla: "SINPE",
+                        tipoEvento: "Error",
+                        descripcion: ex.Message,
+                        stackTrace: ex.StackTrace
+                    );
+
+                    ModelState.AddModelError("", "Error al editar: " + ex.Message);
+                }
+
+
+            } 
+            return RedirectToAction("Index");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
