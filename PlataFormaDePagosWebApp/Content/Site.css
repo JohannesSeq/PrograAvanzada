@@ -18,3 +18,58 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.navbar-custom {
+    background-color: white !important;
+}
+
+    .navbar-custom .nav-link {
+        color: #054e98 !important;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+        .navbar-custom .nav-link:hover {
+            color: #0056b3 !important;
+        }
+.footer-custom {
+    background-color: #054e98;
+    color: white;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.footer-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+    .footer-link:hover {
+        text-decoration: underline;
+        color: #cce6ff;
+    }
+
+.social-icon {
+    color: white;
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+    transition: color 0.3s ease;
+}
+
+    .social-icon:hover {
+        color: #cce6ff;
+    }
+
+.wrap-json {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 500px;
+}
