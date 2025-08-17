@@ -73,3 +73,7 @@ textarea {
     overflow-wrap: break-word;
     max-width: 500px;
 }
+
+.text-primary {
+    color: #0d5191 !important;
+}
