@@ -4,31 +4,40 @@
     ViewBag.Title = "Bitácora de Eventos";
 }
 
-<h2>Bitácora de Eventos</h2>
+<h2 class="mb-4 text-primary fw-bold">Bitácora de Eventos</h2>
 
-<table class="table">
-    <tr>
-        <th>@Html.DisplayNameFor(model => model.IdEvento)</th>
-        <th>@Html.DisplayNameFor(model => model.TablaDeEvento)</th>
-        <th>@Html.DisplayNameFor(model => model.TipoDeEvento)</th>
-        <th>@Html.DisplayNameFor(model => model.FechaDeEvento)</th>
-        <th>@Html.DisplayNameFor(model => model.DescripcionDeEvento)</th>
-        <th>@Html.DisplayNameFor(model => model.StackTrace)</th>
-        <th>@Html.DisplayNameFor(model => model.DatosAnteriores)</th>
-        <th>@Html.DisplayNameFor(model => model.DatosPosteriores)</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<table class="table table-bordered table-striped">
+    <thead style="background-color: #0d6efd; color: white;">
         <tr>
-            <td>@item.IdEvento</td>
-            <td>@item.TablaDeEvento</td>
-            <td>@item.TipoDeEvento</td>
-            <td>@item.FechaDeEvento</td>
-            <td>@item.DescripcionDeEvento</td>
-            <td><pre class="wrap-json">@item.StackTrace</pre></td>
-            <td><pre class="wrap-json">@item.DatosAnteriores</pre></td>
-            <td><pre class="wrap-json">@item.DatosPosteriores</pre></td>
+            <th>@Html.DisplayName("ID del Evento")</th>
+            <th>@Html.DisplayName("Tabla del Evento")</th>
+            <th>@Html.DisplayName("Tipo de Evento")</th>
+            <th>@Html.DisplayName("Fecha del Evento")</th>
+            <th>@Html.DisplayName("Descripción")</th>
+            <th>@Html.DisplayName("Stack Trace")</th>
+            <th>@Html.DisplayName("Datos Anteriores")</th>
+            <th>@Html.DisplayName("Datos Posteriores")</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdEvento</td>
+                <td>@item.TablaDeEvento</td>
+                <td>@item.TipoDeEvento</td>
+                <td>@item.FechaDeEvento.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.DescripcionDeEvento</td>
+                <td>
+                    <pre class="wrap-json text-danger" style="white-space: pre-wrap;">@item.StackTrace</pre>
+                </td>
+                <td>
+                    <pre class="wrap-json text-secondary" style="white-space: pre-wrap;">@item.DatosAnteriores</pre>
+                </td>
+                <td>
+                    <pre class="wrap-json text-success" style="white-space: pre-wrap;">@item.DatosPosteriores</pre>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

@@ -1,40 +1,61 @@
 ﻿@model IEnumerable<PlataFormaDePagosWebApp.CONFIGURACION_DE_COMERCIO>
+
 @{
     ViewBag.Title = "Configuraciones de Comercio";
+
+    Func<int, string> tipoConfiguracionTexto = tipo =>
+        tipo == 1 ? "Plataforma" :
+        tipo == 2 ? "Externa" :
+        tipo == 3 ? "Ambas" : "Desconocido";
+
+    Func<bool, string> estadoTexto = estado => estado ? "Activo" : "Inactivo";
 }
-<h2>Configuraciones de Comercio</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Comercio</th>
-            <th>Tipo de Configuración</th>
-            <th>Comisión</th>
-            <th>Fecha Registro</th>
-            <th>Fecha Modificación</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.COMERCIO.Nombre</td>
-                <td>
-                    @(item.TipoConfiguracion == 1 ? "Plataforma" :
-                  item.TipoConfiguracion == 2 ? "Externa" : "Ambas")
-                </td>
-                <td>@item.Comision%</td>
-                <td>@item.FechaDeRegistro.ToString("g")</td>
-                <td>@item.FechaDeModificacion.ToString("g")</td>
-                <td>@(item.Estado ? "Activo" : "Inactivo")</td>
-                <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.idConfiguracion })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-primary">Configuraciones de Comercio</h2>
+        <a href="@Url.Action("Create")" class="btn text-white shadow-sm rounded-pill px-4" style="background-color:#0d5191">
+            <i class="fas fa-plus me-2"></i> Nueva Configuración
+        </a>
+    </div>
 
-<p>@Html.ActionLink("Nueva configuración", "Create")</p>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle shadow-sm">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Comercio</th>
+                    <th>Tipo de Configuración</th>
+                    <th>Comisión</th>
+                    <th>Fecha Registro</th>
+                    <th>Fecha Modificación</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.COMERCIO?.Nombre</td>
+                        <td>@tipoConfiguracionTexto(item.TipoConfiguracion)</td>
+                        <td>@item.Comision%</td>
+                        <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@(item.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                        <td>
+                            <span class="badge bg-@(item.Estado ? "success" : "secondary")">
+                                @estadoTexto(item.Estado)
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="@Url.Action("Edit", new { id = item.idConfiguracion })" class="btn btn-warning btn-sm" title="Editar">
+                                    <i class="fas fa-pen me-1"></i> Editar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

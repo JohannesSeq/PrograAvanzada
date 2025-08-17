@@ -16,62 +16,79 @@
     Func<bool, string> estadoTexto = estado => estado ? "Activo" : "Inactivo";
 }
 
-<h2 class="mb-4">Lista de Comercios</h2>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-primary">Lista de Comercios</h2>
 
-<p>
-    <a href="@Url.Action("Create")" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Registrar Nuevo Comercio
-    </a>
-</p>
+        <a href="@Url.Action("Create")"
+           class="btn shadow-sm rounded-pill px-4 text-white"
+           style="background-color: #0d5191;">
+            <i class="fas fa-plus me-2"></i> Registrar Nuevo Comercio
+        </a>
 
 
-<table class="table table-bordered table-striped">
-    <thead style="background-color: #0d6efd; color: white;">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.First().Identificacion)</th>
-            <th>@Html.DisplayName("Tipo de Identificación")</th>
-            <th>@Html.DisplayNameFor(model => model.First().Nombre)</th>
-            <th>@Html.DisplayName("Tipo de Comercio")</th>
-            <th>@Html.DisplayNameFor(model => model.First().Telefono)</th>
-            <th>@Html.DisplayNameFor(model => model.First().CorreoElectronico)</th>
-            <th>@Html.DisplayNameFor(model => model.First().Direccion)</th>
-            <th>@Html.DisplayNameFor(model => model.First().FechaDeRegistro)</th>
-            <th>@Html.DisplayNameFor(model => model.First().FechaDeModificacion)</th>
-            <th>@Html.DisplayName("Estado")</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Identificacion</td>
-                <td>@tipoIdentificacionTexto(item.TipoIdentificacion)</td>
-                <td>@item.Nombre</td>
-                <td>@tipoComercioTexto(item.TipoDeComercio)</td>
-                <td>@item.Telefono</td>
-                <td>@item.CorreoElectronico</td>
-                <td>@item.Direccion</td>
-                <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>@(item.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
-                <td>
-                    <span class="badge bg-@(item.Estado ? "success" : "secondary")">
-                        @estadoTexto(item.Estado)
-                    </span>
-                </td>
-                <td class="text-center">
-                    <a href="@Url.Action("Edit", new { id = item.IdComercio })" class="btn btn-warning btn-sm me-1">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <a href="@Url.Action("Details", new { id = item.IdComercio })" class="btn btn-info btn-sm text-white me-1">
-                        <i class="fas fa-info-circle"></i> Detalles
-                    </a>
-                    <a href="@Url.Action("Delete", new { id = item.IdComercio })" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i> Eliminar
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    </div>
 
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle shadow-sm">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.First().Identificacion)</th>
+                    <th>Tipo de Identificación</th>
+                    <th>@Html.DisplayNameFor(model => model.First().Nombre)</th>
+                    <th>Tipo de Comercio</th>
+                    <th>@Html.DisplayNameFor(model => model.First().Telefono)</th>
+                    <th>@Html.DisplayName("Correo Electrónico")</th>
+                    <th>@Html.DisplayName("Direccion")</th>
+                    <th>@Html.DisplayName("Fecha de Registro")</th>
+                    <th>@Html.DisplayName("Fecha de Modificación")</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Identificacion</td>
+                        <td>@tipoIdentificacionTexto(item.TipoIdentificacion)</td>
+                        <td>@item.Nombre</td>
+                        <td>@tipoComercioTexto(item.TipoDeComercio)</td>
+                        <td>@item.Telefono</td>
+                        <td>@item.CorreoElectronico</td>
+                        <td>@item.Direccion</td>
+                        <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@(item.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                        <td>
+                            <span class="badge bg-@(item.Estado ? "success" : "secondary")">
+                                @estadoTexto(item.Estado)
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="@Url.Action("Edit", new { id = item.IdComercio })"
+                                   class="btn btn-warning btn-sm d-flex align-items-center px-2 rounded"
+                                   title="Editar">
+                                    <i class="fas fa-pen me-1"></i> Editar
+                                </a>
+
+                                <a href="@Url.Action("Details", new { id = item.IdComercio })"
+                                   class="btn btn-sm text-white d-flex align-items-center px-2 rounded"
+                                   style="background-color: #0d5191;"
+                                   title="Ver SINPE">
+                                    <i class="fas fa-eye me-1"></i> Ver
+                                </a>
+
+                                <a href="@Url.Action("Delete", new { id = item.IdComercio })"
+                                   class="btn btn-danger btn-sm d-flex align-items-center px-2 rounded"
+                                   title="Eliminar">
+                                    <i class="fas fa-trash-alt me-1"></i> Eliminar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
