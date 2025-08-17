@@ -77,3 +77,9 @@ textarea {
 .text-primary {
     color: #0d5191 !important;
 }
+
+pre {
+    font-size: 0.85rem;
+    max-width: 400px;
+    overflow-x: auto;
+}
