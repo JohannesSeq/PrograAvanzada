@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="eeaa2d5b1d714dbfb89b2a7be6b5083b" Name="Diagram1">
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.BITACORA" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.CAJA" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.CONFIGURACION_DE_COMERCIO" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.SINPE" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PROYECTO_BANCO_LOS_PATITOSModel.USUARIO" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
+        <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.CAJA_CMERCIO_PK" ManuallyRouted="false" />
+        <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.CMERCIO_CONF_PK" ManuallyRouted="false" />
+        <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.COMERCIO_USUARIO_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="PROYECTO_BANCO_LOS_PATITOSModel.REPORTESMENSUALES_FK" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
