@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Recibir SINPE";
+}
+
+<h2>Registrar nuevo SINPE</h2>
+
+<form id="formSinpe">
+    <div class="form-group">
+        <label>Teléfono Origen</label>
+        <input type="text" id="TelefonoOrigen" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Nombre Origen</label>
+        <input type="text" id="NombreOrigen" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Teléfono Destinatario</label>
+        <input type="text" id="TelefonoDestinatario" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Nombre Destinatario</label>
+        <input type="text" id="NombreDestinatario" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Monto</label>
+        <input type="number" id="Monto" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Descripción</label>
+        <input type="text" id="Descripcion" class="form-control" />
+    </div>
+    <br />
+    <button type="button" id="btnEnviar" class="btn btn-primary">Enviar</button>
+</form>
+
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script>
+    const apiUrl = "https://localhost:44306/api/sinpe";
+
+    $("#btnEnviar").click(function () {
+        let obj = {
+            TelefonoOrigen: $("#TelefonoOrigen").val(),
+            NombreOrigen: $("#NombreOrigen").val(),
+            TelefonoDestinatario: $("#TelefonoDestinatario").val(),
+            NombreDestinatario: $("#NombreDestinatario").val(),
+            Monto: $("#Monto").val(),
+            Descripcion: $("#Descripcion").val()
+        };
+
+        $.ajax({
+            url: apiUrl + "/recibir",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(obj),
+            success: function (res) {
+                alert(res.Mensaje);
+                $("#formSinpe")[0].reset();
+            }
+        });
+    });
+</script>

@@ -138,6 +138,7 @@
     <Compile Include="Controllers\CONFIGURACION_DE_COMERCIOController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\REPORTESMENSUALESController.cs" />
+    <Compile Include="Controllers\SinpeApiController.cs" />
     <Compile Include="Controllers\SINPEsController.cs" />
     <Compile Include="Controllers\USUARIOsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -273,6 +274,8 @@
     <Content Include="Views\REPORTESMENSUALES\Details.cshtml" />
     <Content Include="Views\REPORTESMENSUALES\Edit.cshtml" />
     <Content Include="Views\REPORTESMENSUALES\Index.cshtml" />
+    <Content Include="Views\SinpeApi\Consultar.cshtml" />
+    <Content Include="Views\SinpeApi\Recibir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

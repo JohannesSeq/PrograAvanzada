@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Consultar SINPE";
+}
+
+<h2>Consultar SINPEs</h2>
+
+<div>
+    <label>Teléfono Caja:</label>
+    <input type="text" id="telefono" class="form-control" placeholder="Ej: 88885555" />
+    <button id="btnConsultar" class="btn btn-primary">Consultar</button>
+</div>
+
+<br />
+
+<table class="table table-bordered" id="tablaSinpes">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Monto</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script>
+    const apiUrl = "https://localhost:44306/api/sinpe";
+
+    // Consultar SINPEs
+    $("#btnConsultar").click(function () {
+        let tel = $("#telefono").val();
+
+        $.get(apiUrl + "/consultar?telefono=" + tel, function (data) {
+            let tbody = $("#tablaSinpes tbody");
+            tbody.empty();
+
+            data.forEach(s => {
+                let row = `
+                    <tr>
+                        <td>${s.IdSinpe}</td>
+                        <td>${s.NombreOrigen} (${s.TelefonoOrigen})</td>
+                        <td>${s.NombreDestinatario} (${s.TelefonoDestinatario})</td>
+                        <td>${s.Monto}</td>
+                        <td>${s.Descripcion}</td>
+                        <td>${s.Fecha}</td>
+                        <td>${s.Estado ? "✔️" : "❌"}</td>
+                        <td>
+                            <button class="btn btn-success btnSync" data-id="${s.IdSinpe}">Sincronizar</button>
+                        </td>
+                    </tr>`;
+                tbody.append(row);
+            });
+        });
+    });
+
+    // Sincronizar SINPE
+    $(document).on("click", ".btnSync", function () {
+        let id = $(this).data("id");
+
+        $.ajax({
+            url: apiUrl + "/sincronizar",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ IdSinpe: id }),
+            success: function (res) {
+                alert(res.Mensaje);
+                $("#btnConsultar").click(); // refrescar lista
+            }
+        });
+    });
+</script>
