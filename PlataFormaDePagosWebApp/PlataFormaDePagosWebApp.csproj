@@ -166,6 +166,7 @@
     <Compile Include="Controllers\CAJAsController.cs" />
     <Compile Include="Controllers\COMERCIOsController.cs" />
     <Compile Include="Controllers\CONFIGURACION_DE_COMERCIOController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\REPORTESMENSUALESController.cs" />
@@ -175,7 +176,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\AuthHelper.cs" />
+    <Compile Include="Helpers\AuthzHandler.cs" />
     <Compile Include="Helpers\BitacoraHelper.cs" />
     <Compile Include="ModeloBanco.Context.cs">
       <AutoGen>True</AutoGen>
@@ -334,6 +335,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\Forbidden.cshtml" />
     <Content Include="Views\Shared\Unauthenticated.cshtml" />
+    <Content Include="Views\Error\Forbidden.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

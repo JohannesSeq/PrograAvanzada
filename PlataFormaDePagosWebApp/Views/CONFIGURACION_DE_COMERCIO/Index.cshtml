@@ -36,11 +36,11 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.COMERCIO?.Nombre</td>
+                        <td>@item.COMERCIO.Nombre</td>
                         <td>@tipoConfiguracionTexto(item.TipoConfiguracion)</td>
                         <td>@item.Comision%</td>
                         <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>@(item.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                        <td>@(item.FechaDeModificacion.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
                         <td>
                             <span class="badge bg-@(item.Estado ? "success" : "secondary")">
                                 @estadoTexto(item.Estado)

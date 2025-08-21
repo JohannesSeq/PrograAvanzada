@@ -9,6 +9,7 @@ namespace PlataFormaDePagosWebApp.Controllers
     {
         private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
 
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Index()
         {
             var bitacora = db.BITACORA.OrderByDescending(b => b.FechaDeEvento).ToList();
@@ -21,5 +22,6 @@ namespace PlataFormaDePagosWebApp.Controllers
                 db.Dispose();
             base.Dispose(disposing);
         }
+
     }
 }

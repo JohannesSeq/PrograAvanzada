@@ -12,12 +12,15 @@ namespace PlataFormaDePagosWebApp.Controllers
     {
         private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
 
+        //Get
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Index()
         {
             var reportes = db.REPORTESMENSUALES.Include(r => r.COMERCIO).ToList();
             return View(reportes);
         }
 
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Details(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -26,6 +29,7 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(reporte);
         }
 
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Create()
         {
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial");
@@ -105,6 +109,7 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(reporte);
         }
 
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Delete(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

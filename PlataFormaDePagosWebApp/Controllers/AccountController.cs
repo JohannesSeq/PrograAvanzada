@@ -1,20 +1,25 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using PlataFormaDePagosWebApp.Helpers;
+using PlataFormaDePagosWebApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using PlataFormaDePagosWebApp.Models;
 
 namespace PlataFormaDePagosWebApp.Controllers
 {
+
     [Authorize]
     public class AccountController : Controller
     {
+        private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -139,7 +144,11 @@ namespace PlataFormaDePagosWebApp.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            var model = new RegisterViewModel
+            {
+                ListaRoles = new List<string> { "Administrador", "Cajero" }
+            };
+            return View(model);
         }
 
         //
@@ -151,24 +160,66 @@ namespace PlataFormaDePagosWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // Para obtener más información sobre cómo habilitar la confirmación de cuentas y el restablecimiento de contraseña, visite https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Enviar un correo electrónico con este vínculo
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirmar la cuenta", "Para confirmar su cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
+                var user = new ApplicationUser 
+                { 
+                    UserName = model.Email, 
+                    Email = model.Email 
+                };
 
-                    return RedirectToAction("Index", "Home");
+                USUARIO Udata = db.USUARIO.FirstOrDefault(u => u.CorreoElectronico == user.UserName);
+
+                if(Udata != null)
+                {
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await UserManager.AddToRoleAsync(user.Id, model.role);
+
+                        //Hacemos el matching del netID del usuario con el de la identidad de ASP.Net
+                        Udata.FechaDeModificacion = DateTime.Now;
+                        Udata.IdNetUser = Guid.Parse(user.Id);
+
+
+                        try
+                        {
+                            db.Entry(Udata).State = EntityState.Modified;
+                            db.SaveChanges();
+                            BitacoraHelper.RegistrarEvento(
+                                tabla: "USUARIO",
+                                tipoEvento: "Editar",
+                                descripcion: $"Usuario editado: {Udata.IdUsuario}",
+                                datosPosteriores: Udata
+                            );
+
+                        }
+                        catch (Exception ex)
+                        {
+                            BitacoraHelper.RegistrarEvento(
+                                tabla: "USUARIO",
+                                tipoEvento: "Error",
+                                descripcion: ex.Message,
+                                stackTrace: ex.StackTrace
+                            );
+
+                            ModelState.AddModelError("", "Error al editar: " + ex.Message);
+                        }
+
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
+                } else
+                {
+                    //Algo se me va a ocurrir para darle feedback al usuario
+                    Console.WriteLine("El correo del usuario no existe! No se puede crear su cuenta.");
                 }
-                AddErrors(result);
+
+
             }
 
-            // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
+
+            model.ListaRoles = new List<string> { "Administrador", "Cajero" };
             return View(model);
         }
 

@@ -82,6 +82,12 @@ namespace PlataFormaDePagosWebApp.Models
         [Display(Name = "Confirmar contraseña")]
         [Compare("Password", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Rol")]
+        public string role { get; set; }
+
+        public List<string> ListaRoles { get; internal set; }
     }
 
     public class ResetPasswordViewModel
