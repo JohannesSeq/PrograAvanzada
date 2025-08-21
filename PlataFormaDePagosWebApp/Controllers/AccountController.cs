@@ -209,10 +209,11 @@ namespace PlataFormaDePagosWebApp.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                     AddErrors(result);
-                } else
+                } 
+                else
                 {
-                    //Algo se me va a ocurrir para darle feedback al usuario
                     Console.WriteLine("El correo del usuario no existe! No se puede crear su cuenta.");
+                    return RedirectToAction("NotFound", "Error");
                 }
 
 
