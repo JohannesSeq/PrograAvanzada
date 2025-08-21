@@ -175,6 +175,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AuthHelper.cs" />
     <Compile Include="Helpers\BitacoraHelper.cs" />
     <Compile Include="ModeloBanco.Context.cs">
       <AutoGen>True</AutoGen>
@@ -239,6 +240,7 @@
       <DependentUpon>ModeloBanco.edmx</DependentUpon>
       <LastGenOutput>ModeloBanco.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\AuthJS.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -331,6 +333,7 @@
     <Content Include="Views\manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\Forbidden.cshtml" />
+    <Content Include="Views\Shared\Unauthenticated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
