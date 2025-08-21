@@ -16,6 +16,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
 
         // GET: USUARIOs
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Index()
         {
             var uSUARIO = db.USUARIO.Include(u => u.COMERCIO);
@@ -23,6 +24,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         }
 
         // GET: USUARIOs/Details/5
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -38,6 +40,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         }
 
         // GET: USUARIOs/Create
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Create()
         {
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion");
@@ -91,6 +94,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         }
 
         // GET: USUARIOs/Edit/5
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -150,6 +154,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         }
 
         // GET: USUARIOs/Delete/5
+        [AuthzHandler(Roles = "Administrador")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

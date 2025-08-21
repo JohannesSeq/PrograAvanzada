@@ -4,86 +4,79 @@
     ViewBag.Title = "Delete";
 }
 
-@if (Request.IsAuthenticated)
-{
 
-    <h2>Delete</h2>
+<h2>Delete</h2>
 
-    <h3>Are you sure you want to delete this?</h3>
-    <div>
-        <h4>CAJA</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </dt>
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>CAJA</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Nombre)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Descripcion)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.TelefonoSINPE)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.TelefonoSINPE)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.TelefonoSINPE)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.TelefonoSINPE)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.FechaDeRegistro)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.FechaDeRegistro)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.FechaDeRegistro)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.FechaDeModificacion)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDeModificacion)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.FechaDeModificacion)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.FechaDeModificacion)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Estado)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Estado)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.COMERCIO.Identificacion)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.COMERCIO.Identificacion)
+        </dd>
 
-        </dl>
+    </dl>
 
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-            <div class="form-actions no-color">
-                <input type="submit" value="Delete" class="btn btn-default" /> |
-                @Html.ActionLink("Back to List", "Index")
-            </div>
-        }
-    </div>
-}
-else
-{
-    @Html.Partial("Unauthenticated")
-}
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

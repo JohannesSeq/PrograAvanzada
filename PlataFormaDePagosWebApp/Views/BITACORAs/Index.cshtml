@@ -4,54 +4,46 @@
     ViewBag.Title = "Bitácora de Eventos";
 }
 
-@if (Request.IsAuthenticated)
-{
+<h2 class="mb-4 text-primary fw-bold">Bitácora de Eventos</h2>
 
-    <h2 class="mb-4 text-primary fw-bold">Bitácora de Eventos</h2>
-
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-            <thead class="table-primary">
+<div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>ID del Evento</th>
+                <th>Tabla del Evento</th>
+                <th>Tipo de Evento</th>
+                <th>Fecha del Evento</th>
+                <th>Descripción</th>
+                <th>Stack Trace</th>
+                <th>Datos Anteriores</th>
+                <th>Datos Posteriores</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <th>ID del Evento</th>
-                    <th>Tabla del Evento</th>
-                    <th>Tipo de Evento</th>
-                    <th>Fecha del Evento</th>
-                    <th>Descripción</th>
-                    <th>Stack Trace</th>
-                    <th>Datos Anteriores</th>
-                    <th>Datos Posteriores</th>
+                    <td>@item.IdEvento</td>
+                    <td>@item.TablaDeEvento</td>
+                    <td>@item.TipoDeEvento</td>
+                    <td>@item.FechaDeEvento.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.DescripcionDeEvento</td>
+                    <td>
+                        <pre class="text-danger" style="white-space: pre-wrap; word-break: break-word;">@item.StackTrace</pre>
+                    </td>
+                    <td>
+                        <pre class="text-secondary" style="white-space: pre-wrap; word-break: break-word;">@item.DatosAnteriores</pre>
+                    </td>
+                    <td>
+                        <pre class="text-success" style="white-space: pre-wrap; word-break: break-word;">@item.DatosPosteriores</pre>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.IdEvento</td>
-                        <td>@item.TablaDeEvento</td>
-                        <td>@item.TipoDeEvento</td>
-                        <td>@item.FechaDeEvento.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>@item.DescripcionDeEvento</td>
-                        <td>
-                            <pre class="text-danger" style="white-space: pre-wrap; word-break: break-word;">@item.StackTrace</pre>
-                        </td>
-                        <td>
-                            <pre class="text-secondary" style="white-space: pre-wrap; word-break: break-word;">@item.DatosAnteriores</pre>
-                        </td>
-                        <td>
-                            <pre class="text-success" style="white-space: pre-wrap; word-break: break-word;">@item.DatosPosteriores</pre>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
+            }
+        </tbody>
+    </table>
+</div>
 
 }
-else
-{
-    @Html.Partial("Unauthenticated")
 
-}
 

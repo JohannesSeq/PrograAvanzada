@@ -1,7 +1,19 @@
 ﻿
 @using Microsoft.AspNet.Identity
-<h2 class="mb-4 text-primary fw-bold">Error de permisos!</h2>
-<p>No tienes permisos para ver esta pagina.</p>
-<a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg" style="background-color:#054e98; border:none;">
-    Volver al inicio
-</a>
+
+@if (Request.IsAuthenticated)
+{
+    <h2 class="mb-4 text-primary fw-bold">Error de permisos!</h2>
+    <p>No tienes permisos para ver esta pagina.</p>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg" style="background-color:#054e98; border:none;">
+        Volver al inicio
+    </a>
+}
+else
+{
+    <h2 class="mb-4 text-primary fw-bold">Error de permisos!</h2>
+    <p>Tiene que iniciar sesion para poder ver esta pagina web.</p>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg" style="background-color:#054e98; border:none;">
+        Volver al inicio
+    </a>
+}

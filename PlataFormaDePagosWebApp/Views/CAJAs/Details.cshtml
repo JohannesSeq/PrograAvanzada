@@ -4,78 +4,72 @@
     ViewBag.Title = "Details";
 }
 
-@if (Request.IsAuthenticated)
-{
-    <h2>Details</h2>
 
-    <div>
-        <h4>CAJA</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </dt>
+<h2>Details</h2>
 
-            <dd>
-                @Html.DisplayFor(model => model.Nombre)
-            </dd>
+<div>
+    <h4>CAJA</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.Descripcion)
-            </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.TelefonoSINPE)
-            </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.TelefonoSINPE)
-            </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TelefonoSINPE)
+        </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.FechaDeRegistro)
-            </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TelefonoSINPE)
+        </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.FechaDeRegistro)
-            </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+        </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.FechaDeModificacion)
-            </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaDeRegistro)
+        </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.FechaDeModificacion)
-            </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDeModificacion)
+        </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Estado)
-            </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaDeModificacion)
+        </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.Estado)
-            </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
-            </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.COMERCIO.Identificacion)
-            </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.COMERCIO.Identificacion)
+        </dt>
 
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.IdCaja }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-}
-else
-{
-    @Html.Partial("Unauthenticated")
-}
+        <dd>
+            @Html.DisplayFor(model => model.COMERCIO.Identificacion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdCaja }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

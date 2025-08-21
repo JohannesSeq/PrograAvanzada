@@ -333,8 +333,6 @@
     <Content Include="Views\manage\SetPassword.cshtml" />
     <Content Include="Views\manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Shared\Forbidden.cshtml" />
-    <Content Include="Views\Shared\Unauthenticated.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
   </ItemGroup>
   <ItemGroup>

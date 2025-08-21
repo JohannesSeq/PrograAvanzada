@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using PlataFormaDePagosWebApp;
 using PlataFormaDePagosWebApp.Helpers;
@@ -13,12 +16,36 @@ namespace PlataFormaDePagosWebApp.Controllers
     {
         private PROYECTO_BANCO_LOS_PATITOSEntities db = new PROYECTO_BANCO_LOS_PATITOSEntities();
 
+        [AuthzHandler(Roles = "Administrador,Cajero")]
         public ActionResult Index()
         {
-            var cAJA = db.CAJA.Include(c => c.COMERCIO);
-            return View(cAJA.ToList());
+
+            //var cAJA = db.CAJA.Include(c => c.COMERCIO);
+
+            if (User.IsInRole("Administrador")) 
+            {
+                var cAJA = db.CAJA.Include(c => c.COMERCIO);
+                return View(cAJA.ToList());
+
+            } 
+            
+            else
+            {
+                var usermail = User.Identity.GetUserName();
+                USUARIO Udata = db.USUARIO.FirstOrDefault(u => u.CorreoElectronico == usermail);
+                //var IdCom = Udata.IdComercio;
+                //COMERCIO Cdata = db.COMERCIO.FirstOrDefault(c => c.Identificacion == Udata.IdComercio.ToString());
+
+                var cAJA = from c in db.CAJA
+                           where c.IdComercio == Udata.IdComercio
+                           select c;
+                return View(cAJA.ToList());
+            
+            }
+
         }
 
+        [AuthzHandler(Roles = "Administrador,Cajero")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -31,6 +58,7 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(cAJA);
         }
 
+        [AuthzHandler(Roles = "Administrador,Cajero")]
         public ActionResult Create()
         {
             ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Identificacion");
@@ -93,6 +121,7 @@ namespace PlataFormaDePagosWebApp.Controllers
             return View(cAJA);
         }
 
+        [AuthzHandler(Roles = "Administrador,Cajero")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
