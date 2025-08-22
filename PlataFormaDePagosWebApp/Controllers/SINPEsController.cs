@@ -107,6 +107,8 @@ namespace PlataFormaDePagosWebApp.Controllers
                 try
                 {
                     var anterior = db.SINPE.AsNoTracking().FirstOrDefault(x => x.IdSinpe == sINPE.IdSinpe);
+
+                    sINPE.FechaDeRegistro = anterior.FechaDeRegistro;
                     sINPE.FechaDeModificacion = DateTime.Now;
 
                     db.Entry(sINPE).State = EntityState.Modified;

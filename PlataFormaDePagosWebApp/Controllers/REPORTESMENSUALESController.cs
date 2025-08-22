@@ -32,7 +32,7 @@ namespace PlataFormaDePagosWebApp.Controllers
         [AuthzHandler(Roles = "Administrador")]
         public ActionResult Create()
         {
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial");
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Nombre");
             return View();
         }
 
@@ -62,7 +62,7 @@ namespace PlataFormaDePagosWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial", reporte.IdComercio);
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Nombre", reporte.IdComercio);
             return View(reporte);
         }
 
@@ -72,7 +72,7 @@ namespace PlataFormaDePagosWebApp.Controllers
             var reporte = db.REPORTESMENSUALES.Find(id);
             if (reporte == null) return HttpNotFound();
 
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial", reporte.IdComercio);
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Nombre", reporte.IdComercio);
             return View(reporte);
         }
 
@@ -105,7 +105,7 @@ namespace PlataFormaDePagosWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "NombreComercial", reporte.IdComercio);
+            ViewBag.IdComercio = new SelectList(db.COMERCIO, "IdComercio", "Nombre", reporte.IdComercio);
             return View(reporte);
         }
 

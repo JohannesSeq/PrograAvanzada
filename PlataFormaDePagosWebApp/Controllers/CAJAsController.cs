@@ -144,6 +144,9 @@ namespace PlataFormaDePagosWebApp.Controllers
                 try
                 {
                     var anterior = db.CAJA.AsNoTracking().FirstOrDefault(x => x.IdCaja == cAJA.IdCaja);
+
+                    
+                    cAJA.FechaDeRegistro = anterior.FechaDeRegistro;
                     cAJA.FechaDeModificacion = DateTime.Now;
 
                     db.Entry(cAJA).State = EntityState.Modified;
